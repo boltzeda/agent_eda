@@ -108,9 +108,14 @@ def verify(build: Path, home: Path, product: Path) -> dict:
     half_bar = CLIStatusBarMixin._build_context_bar(None, 50)
     if '?' not in unknown_bar or '●' not in half_bar or '○' not in half_bar:
         raise AssertionError('context meter display logic did not load')
-    with redirect_stdout(StringIO()):
-        if CLICommandsMixin._handle_update_command(object()) is not False:
-            raise AssertionError('/update attempted to relaunch the native updater')
+    update_probe = SimpleNamespace(_pending_relaunch=None)
+    if CLICommandsMixin._handle_update_command(update_probe) is not True or update_probe._pending_relaunch != ['update']:
+        raise AssertionError('/update did not request the Agent-EDA updater')
+    from hermes_cli.relaunch import relaunch
+    with patch.dict(os.environ, AGENT_EDA_PRODUCT=str(product)), patch('hermes_cli.relaunch.os.execv') as execv:
+        relaunch(['update'], preserve_inherited=False)
+    if execv.call_args.args[1][-2:] != [str(product / 'bin/eda'), 'update']:
+        raise AssertionError('/update relaunch did not target the Agent-EDA launcher')
     try:
         cmd_update(None)
     except SystemExit as error:

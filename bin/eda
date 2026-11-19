@@ -88,6 +88,14 @@ def latest_release() -> str:
 
 
 def main() -> int:
+    if len(sys.argv) > 1 and sys.argv[1] == 'update':
+        sys.path.insert(0, str(PRODUCT / 'distribution' / 'scripts'))
+        from update_product import update
+        try:
+            return update(PRODUCT)
+        except (OSError, RuntimeError, ValueError, KeyError, subprocess.CalledProcessError) as error:
+            print(f'Agent-EDA update stopped: {error}', file=sys.stderr)
+            return 1
     build = selected_build().resolve()
     installed = local_install() if not ACTIVE.is_file() else None
     default_home = installed['home'] if installed and installed['build'].resolve() == build else WORKSPACE / 'data/agent_eda-guarded'
@@ -107,10 +115,6 @@ def main() -> int:
             return 1
         print(f'Latest stable Hermes release: {current}. Pin stays unchanged.')
         return 0
-    if len(sys.argv) > 1 and sys.argv[1] == 'update':
-        print(message)
-        print('Agent-EDA upgrades use the pinned candidate qualification process; use --check-upstream to inspect releases.')
-        return 2
     if not (home / 'config.yaml').is_file():
         raise SystemExit('Isolated profile is not installed; run distribution/scripts/install_profile.py first.')
     native_python = build / '.venv' / ('Scripts/python.exe' if os.name == 'nt' else 'bin/python')
@@ -120,6 +124,7 @@ def main() -> int:
         os.execv(str(native_python), [str(native_python), str(Path(__file__).resolve()), *sys.argv[1:]])
     print(message, flush=True)
     os.environ['HERMES_HOME'] = str(home)
+    os.environ['AGENT_EDA_PRODUCT'] = str(PRODUCT)
     sys.path.insert(0, str(build))
     from hermes_cli.main import main as hermes_main
     return hermes_main() or 0

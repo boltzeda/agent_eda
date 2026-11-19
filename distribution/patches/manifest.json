@@ -26,8 +26,8 @@
       "functions": [
         "_handle_update_command"
       ],
-      "guard": "disable_slash_update",
-      "purpose": "Keep /update inside the chat session and require the pinned candidate upgrade process.",
+      "guard": "route_slash_update",
+      "purpose": "Route /update through the Agent-EDA product updater after terminal cleanup.",
       "consumer": "Agent-EDA update commands",
       "removal_condition": "Upstream exposes a supported managed-update callback for product distributions."
     },
@@ -63,6 +63,19 @@
       "purpose": "Tell Agent-EDA users to authenticate with the eda launcher.",
       "consumer": "OAuth failure guidance",
       "removal_condition": "Upstream supports a configurable CLI program name."
+    },
+    {
+      "schema": 1,
+      "path": "hermes_cli/relaunch.py",
+      "upstream_sha256": {
+        "baseline": "eecd741ff2c1a193d1b28db0ee01be74f55f05cfabb35a75190b6ff4dc60087a",
+        "candidate": "eecd741ff2c1a193d1b28db0ee01be74f55f05cfabb35a75190b6ff4dc60087a"
+      },
+      "functions": ["relaunch"],
+      "guard": "route_product_update",
+      "purpose": "Launch the Agent-EDA updater instead of the native Hermes updater.",
+      "consumer": "Agent-EDA chat /update command",
+      "removal_condition": "Upstream exposes a supported product updater callback."
     },
     {
       "path": "hermes_cli/main.py",

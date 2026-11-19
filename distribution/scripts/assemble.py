@@ -189,8 +189,17 @@ def assemble(product: Path, reference: Path, output: Path, selected: str = 'base
             raise ValueError(f'core adapter declarations differ from sources: {set(declared) ^ set(replaced)}')
         guards = {
             'disable_nous_login': ['raise SystemExit("Nous Portal login is disabled in Agent-EDA; select another provider with `eda model`.")'],
-            'disable_slash_update': ['print("Agent-EDA updates require a qualified pinned build; run `eda --check-upstream` to inspect releases.")', 'return False'],
+            'route_slash_update': ['self._pending_relaunch = ["update"]', 'return True'],
             'disable_native_update': ['raise SystemExit("Agent-EDA updates require a qualified pinned build; run `eda --check-upstream` to inspect releases.")'],
+            'route_product_update': [
+                'if list(extra_args) == ["update"] and os.environ.get("AGENT_EDA_PRODUCT"):',
+                '    launcher = pathlib.Path(os.environ["AGENT_EDA_PRODUCT"]) / "bin" / "eda"',
+                '    if sys.platform == "win32":',
+                '        import subprocess',
+                '        raise SystemExit(subprocess.call([sys.executable, str(launcher), "update"]))',
+                '    os.execv(sys.executable, [sys.executable, str(launcher), "update"])',
+                '    return',
+            ],
         }
         patches = json.loads((product / 'distribution/patches/manifest.json').read_text())['patches']
         for entry in patches:

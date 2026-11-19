@@ -53,12 +53,26 @@ Git repository. See [architecture](docs/ARCHITECTURE.md) for that boundary.
 
 ## Updates
 
-`eda --status` reports the commit gap between the installed pinned Hermes
-source and the next candidate. `eda --check-upstream` checks the latest stable
-tag without changing the installation. `eda update` and `/update` do not
-replace a pinned build until the candidate passes the qualification process
-in [UPGRADE.md](docs/UPGRADE.md). Setup is for a fresh baseline install; it is
-not an upgrade command.
+`/update` in the chat and `eda update` in a terminal fetch new commits from
+the Agent-EDA GitHub `main` branch and install them in this clone. The updater
+requires a clean, fast-forward source checkout. It assembles a new build,
+installs the locked runtime, reuses unchanged private tool environments,
+preserves the user's provider settings and session history in a new profile,
+checks the twelve tools and CLI startup, then switches the local installation.
+The previous build and profile remain available if verification fails.
+
+The first public snapshot shipped with `/update` disabled. Users who installed
+that snapshot need this one-time bootstrap in their clone:
+
+```bash
+git pull --ff-only origin main
+python3 distribution/scripts/update_product.py
+```
+
+After that, `/update` and `eda update` install future Agent-EDA commits. They
+do not advance the separately pinned Hermes release. `eda --status` reports
+the Hermes commit gap, and `eda --check-upstream` checks its latest stable tag.
+Hermes pin changes still follow [UPGRADE.md](docs/UPGRADE.md).
 
 ## Maintainers
 

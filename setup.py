@@ -68,6 +68,9 @@ def write_local_record(build: Path, home: Path) -> None:
     manifest = build / '.agent-eda-assembly.json'
     record = {'build': build.name, 'home': home.name,
               'assembly_manifest_sha256': hashlib.sha256(manifest.read_bytes()).hexdigest()}
+    if (PRODUCT / '.git').is_dir():
+        record['product_revision'] = subprocess.check_output(
+            ['git', '-C', str(PRODUCT), 'rev-parse', 'HEAD'], text=True).strip()
     target = data / 'local_install.json'
     temporary = data / 'local_install.json.tmp'
     temporary.write_text(json.dumps(record, indent=2) + '\n')
