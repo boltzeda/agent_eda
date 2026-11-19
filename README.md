@@ -17,8 +17,8 @@ for native schematic and PCB work. The PCB placement and routing tool also
 needs a Python interpreter that can import KiCad's `pcbnew` binding.
 
 ```bash
-git clone <Agent-EDA repository URL>
-cd agent-eda
+git clone https://github.com/boltzeda/agent_eda.git
+cd agent_eda
 python3 setup.py
 source ./activate
 eda model
