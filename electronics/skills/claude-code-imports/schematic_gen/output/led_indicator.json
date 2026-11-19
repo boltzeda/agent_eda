@@ -1,0 +1,12 @@
+{
+  "components": [
+    {"ref": "J1", "type": "connector_01x02", "value": "PWR_IN", "x": 30.48, "y": 50.8},
+    {"ref": "R1", "type": "R", "value": "330", "x": 76.2, "y": 50.8},
+    {"ref": "D1", "type": "LED", "value": "RED", "x": 121.92, "y": 50.8}
+  ],
+  "nets": [
+    {"name": "VBUS", "pins": [{"ref": "J1", "pin": "Pin_1"}, {"ref": "R1", "pin": "1"}]},
+    {"name": "LED_OUT", "pins": [{"ref": "R1", "pin": "2"}, {"ref": "D1", "pin": "A"}]},
+    {"name": "GND", "pins": [{"ref": "J1", "pin": "Pin_2"}, {"ref": "D1", "pin": "K"}]}
+  ]
+}

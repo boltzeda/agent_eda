@@ -1,0 +1,7 @@
+name: kicad_generation
+version: 0.1.0
+description: "Generate KiCad schematics with an isolated Circuit Synth environment."
+python_runtime: external
+provides_tools:
+  - kicad_schematic_setup
+  - kicad_schematic_generate

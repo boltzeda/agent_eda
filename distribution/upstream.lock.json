@@ -1,0 +1,11 @@
+{
+  "repository": "https://github.com/NousResearch/hermes-agent.git",
+  "baseline": {
+    "tag": "v0.23.1",
+    "commit": "3b421578588243f920886e6fe79a6faa87ea026e"
+  },
+  "candidate": {
+    "tag": "v0.23.2",
+    "commit": "ae2a81ccc00e9b7c06301523e5bb09608397149c"
+  }
+}

@@ -1,0 +1,114 @@
+{
+  "components": [
+    {"ref": "J",  "type": "connector_01x02", "value": "BATTERY_9V",   "x": 25.4,  "y": 63.5},
+    {"ref": "SW", "type": "switch",          "value": "POWER",        "x": 50.8,  "y": 63.5},
+    {"ref": "C",  "type": "C",               "value": "100uF",        "x": 76.2,  "y": 50.8},
+    {"ref": "U",  "type": "regulator",       "value": "AMS1117-3.3",  "x": 101.6, "y": 63.5},
+    {"ref": "C",  "type": "C",               "value": "10uF",         "x": 127.0, "y": 50.8},
+    {"ref": "R",  "type": "R",               "value": "100k",         "x": 50.8,  "y": 127.0},
+    {"ref": "R",  "type": "R",               "value": "47k",          "x": 76.2,  "y": 127.0},
+    {"ref": "R",  "type": "R",               "value": "47k",          "x": 127.0, "y": 127.0},
+    {"ref": "C",  "type": "C",               "value": "10uF",         "x": 101.6, "y": 152.4},
+    {"ref": "U",  "type": "opamp",           "value": "LM358",        "x": 101.6, "y": 101.6},
+    {"ref": "R",  "type": "R",               "value": "1k",           "x": 152.4, "y": 127.0},
+    {"ref": "Q",  "type": "q_npn",           "value": "BC547",        "x": 177.8, "y": 127.0},
+    {"ref": "R",  "type": "R",               "value": "220",          "x": 203.2, "y": 152.4},
+    {"ref": "R",  "type": "R",               "value": "470",          "x": 228.6, "y": 152.4},
+    {"ref": "D",  "type": "LED",             "value": "FLAME_WARM",   "x": 203.2, "y": 203.2},
+    {"ref": "D",  "type": "LED",             "value": "GLOW_AMBER",   "x": 228.6, "y": 203.2}
+  ],
+  "nets": [
+    {
+      "name": "VBAT",
+      "pins": [
+        {"ref": "J1", "pin": "Pin_1"},
+        {"ref": "SW1", "pin": "1"}
+      ]
+    },
+    {
+      "name": "VSW",
+      "pins": [
+        {"ref": "SW1", "pin": "2"},
+        {"ref": "C1", "pin": "1"},
+        {"ref": "U1", "pin": "3"}
+      ]
+    },
+    {
+      "name": "+3V3",
+      "pins": [
+        {"ref": "U1", "pin": "2"},
+        {"ref": "C2", "pin": "1"},
+        {"ref": "U2", "pin": "8"}
+      ]
+    },
+    {
+      "name": "GND",
+      "pins": [
+        {"ref": "J1", "pin": "Pin_2"},
+        {"ref": "C1", "pin": "2"},
+        {"ref": "U1", "pin": "1"},
+        {"ref": "C2", "pin": "2"},
+        {"ref": "C3", "pin": "2"},
+        {"ref": "U2", "pin": "4"},
+        {"ref": "R3", "pin": "2"},
+        {"ref": "Q1", "pin": "E"},
+        {"ref": "D1", "pin": "K"},
+        {"ref": "D2", "pin": "K"}
+      ]
+    },
+    {
+      "name": "OSC_OUT",
+      "pins": [
+        {"ref": "U2", "pin": "1"},
+        {"ref": "R1", "pin": "1"},
+        {"ref": "R2", "pin": "1"},
+        {"ref": "R4", "pin": "1"}
+      ]
+    },
+    {
+      "name": "OSC_RC",
+      "pins": [
+        {"ref": "U2", "pin": "2"},
+        {"ref": "R1", "pin": "2"},
+        {"ref": "C3", "pin": "1"}
+      ]
+    },
+    {
+      "name": "HYST",
+      "pins": [
+        {"ref": "U2", "pin": "3"},
+        {"ref": "R2", "pin": "2"},
+        {"ref": "R3", "pin": "1"}
+      ]
+    },
+    {
+      "name": "DRIVE",
+      "pins": [
+        {"ref": "R4", "pin": "2"},
+        {"ref": "Q1", "pin": "B"}
+      ]
+    },
+    {
+      "name": "FLAME",
+      "pins": [
+        {"ref": "Q1", "pin": "C"},
+        {"ref": "R5", "pin": "1"},
+        {"ref": "R6", "pin": "1"}
+      ]
+    },
+    {
+      "name": "LED_FLAME",
+      "pins": [
+        {"ref": "R5", "pin": "2"},
+        {"ref": "D1", "pin": "A"}
+      ]
+    },
+    {
+      "name": "LED_GLOW",
+      "pins": [
+        {"ref": "R6", "pin": "2"},
+        {"ref": "D2", "pin": "A"}
+      ]
+    }
+  ]
+}

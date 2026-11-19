@@ -1,0 +1,11 @@
+ERC report (2026-05-18T11:44:08+0000, Encoding UTF8)
+
+***** Sheet /
+[missing_input_pin]: Symbol U2 has input pins in units [ B ] that are not placed.
+    ; warning
+    @(101.60 mm, 101.60 mm): Symbol U2 [LM358]
+[missing_unit]: Symbol U2 has unplaced units [ B ]
+    ; warning
+    @(101.60 mm, 101.60 mm): Symbol U2 [LM358]
+
+ ** ERC messages: 2  Errors 0  Warnings 2

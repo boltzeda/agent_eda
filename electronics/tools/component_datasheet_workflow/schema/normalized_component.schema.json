@@ -1,0 +1,121 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schematic-agent.local/schemas/normalized-component-1.0.json",
+  "title": "CAD-neutral normalized component",
+  "description": "Component identity, pin semantics, and package geometry normalized from cited datasheet evidence.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "component", "datasheet", "pins", "package", "review"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "component": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["manufacturer", "mpn", "pin_count", "evidence"],
+      "properties": {
+        "manufacturer": {"type": "string", "minLength": 1},
+        "mpn": {"type": "string", "minLength": 1},
+        "pin_count": {"type": "integer", "minimum": 1},
+        "evidence": {"$ref": "#/$defs/evidence"},
+        "family": {"type": ["string", "null"]},
+        "description": {"type": ["string", "null"]}
+      }
+    },
+    "datasheet": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["file_name", "sha256", "source_type", "source_url", "revision", "document_date"],
+      "properties": {
+        "file_name": {"type": "string", "minLength": 1},
+        "sha256": {"type": "string", "pattern": "^[a-fA-F0-9]{64}$"},
+        "source_type": {"enum": ["manufacturer", "authorized_distributor_mirror", "user_provided"]},
+        "source_url": {"type": ["string", "null"]},
+        "revision": {"type": ["string", "null"]},
+        "document_date": {"type": ["string", "null"]}
+      }
+    },
+    "pins": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["number", "name", "description", "electrical_type", "evidence"],
+        "properties": {
+          "number": {"type": "string", "minLength": 1},
+          "name": {"type": "string", "minLength": 1},
+          "description": {"type": ["string", "null"]},
+          "electrical_type": {
+            "enum": ["input", "output", "bidirectional", "power_input", "power_output", "passive", "open_drain", "open_collector", "analog", "clock", "no_connect", "unspecified"]
+          },
+          "evidence": {"$ref": "#/$defs/evidence"}
+        }
+      }
+    },
+    "package": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "package_code", "body_dimensions_mm", "land_pattern", "evidence"],
+      "properties": {
+        "name": {"type": ["string", "null"]},
+        "package_code": {"type": ["string", "null"]},
+        "body_dimensions_mm": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "properties": {
+            "length": {"type": ["number", "null"], "exclusiveMinimum": 0},
+            "width": {"type": ["number", "null"], "exclusiveMinimum": 0},
+            "height": {"type": ["number", "null"], "exclusiveMinimum": 0}
+          }
+        },
+        "land_pattern": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "required": ["pads", "evidence"],
+          "properties": {
+            "pads": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["number", "shape", "x_mm", "y_mm", "width_mm", "height_mm", "drill_diameter_mm", "plated"],
+                "properties": {
+                  "number": {"type": "string", "minLength": 1},
+                  "shape": {"enum": ["rectangular", "rounded_rectangular", "circular", "oval", "polygonal", "unspecified"]},
+                  "x_mm": {"type": "number"},
+                  "y_mm": {"type": "number"},
+                  "width_mm": {"type": "number", "exclusiveMinimum": 0},
+                  "height_mm": {"type": "number", "exclusiveMinimum": 0},
+                  "drill_diameter_mm": {"type": ["number", "null"], "exclusiveMinimum": 0},
+                  "plated": {"type": ["boolean", "null"]}
+                }
+              }
+            },
+            "evidence": {"$ref": "#/$defs/evidence"}
+          }
+        },
+        "evidence": {"$ref": "#/$defs/evidence"}
+      }
+    },
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["unresolved_items"],
+      "properties": {
+        "unresolved_items": {"type": "array", "items": {"type": "string"}},
+        "notes": {"type": "array", "items": {"type": "string"}}
+      }
+    }
+  },
+  "$defs": {
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["pages", "excerpt"],
+      "properties": {
+        "pages": {"type": "array", "minItems": 1, "items": {"type": "integer", "minimum": 1}},
+        "excerpt": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}

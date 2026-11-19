@@ -1,0 +1,307 @@
+{
+  "components": [
+    {"ref": "U1", "type": "MCU_Microchip_ATmega:ATmega328P-A", "value": "ATmega328P-AU", "footprint": "Package_QFP:TQFP-32_7x7mm_P0.8mm", "x": 190.5, "y": 76.2},
+    {"ref": "U2", "type": "Interface_USB:CH340G", "value": "CH340G", "footprint": "Package_SO:SOP-16_3.9x9.9mm_P1.27mm", "x": 88.9, "y": 50.8},
+    {"ref": "J1", "type": "Connector:USB_B_Micro", "value": "USB_Micro_B", "footprint": "Connector_USB:USB_Micro-B_Molex-105017-0001", "x": 38.1, "y": 50.8},
+    {"ref": "J2", "type": "Connector_Generic:Conn_01x15", "value": "Digital_Header", "footprint": "Connector_PinHeader_2.54mm:PinHeader_1x15_P2.54mm_Vertical", "x": 304.8, "y": 38.1},
+    {"ref": "J3", "type": "Connector_Generic:Conn_01x15", "value": "Analog_Header", "footprint": "Connector_PinHeader_2.54mm:PinHeader_1x15_P2.54mm_Vertical", "x": 304.8, "y": 139.7},
+    {"ref": "Y1", "type": "crystal", "value": "16MHz", "footprint": "Crystal:Crystal_SMD_HC49-SD", "x": 190.5, "y": 139.7},
+    {"ref": "C1", "type": "C", "value": "22pF", "footprint": "Capacitor_SMD:C_0402_1005Metric", "x": 177.8, "y": 152.4},
+    {"ref": "C2", "type": "C", "value": "22pF", "footprint": "Capacitor_SMD:C_0402_1005Metric", "x": 203.2, "y": 152.4},
+    {"ref": "C3", "type": "C", "value": "100nF", "footprint": "Capacitor_SMD:C_0402_1005Metric", "x": 228.6, "y": 50.8},
+    {"ref": "C4", "type": "C", "value": "100nF", "footprint": "Capacitor_SMD:C_0402_1005Metric", "x": 254.0, "y": 76.2},
+    {"ref": "C5", "type": "C", "value": "100nF", "footprint": "Capacitor_SMD:C_0402_1005Metric", "x": 114.3, "y": 25.4},
+    {"ref": "C6", "type": "C", "value": "10uF", "footprint": "Capacitor_SMD:C_0805_2012Metric", "x": 63.5, "y": 25.4},
+    {"ref": "C7", "type": "C", "value": "100nF", "footprint": "Capacitor_SMD:C_0402_1005Metric", "x": 139.7, "y": 63.5},
+    {"ref": "R1", "type": "R", "value": "10k", "footprint": "Resistor_SMD:R_0402_1005Metric", "x": 139.7, "y": 38.1},
+    {"ref": "R2", "type": "R", "value": "1k", "footprint": "Resistor_SMD:R_0402_1005Metric", "x": 38.1, "y": 114.3},
+    {"ref": "R3", "type": "R", "value": "1k", "footprint": "Resistor_SMD:R_0402_1005Metric", "x": 88.9, "y": 114.3},
+    {"ref": "D1", "type": "LED", "value": "Green", "footprint": "LED_SMD:LED_0805_2012Metric", "x": 63.5, "y": 114.3},
+    {"ref": "D2", "type": "LED", "value": "Amber", "footprint": "LED_SMD:LED_0805_2012Metric", "x": 114.3, "y": 114.3},
+    {"ref": "SW1", "type": "switch", "value": "RESET", "footprint": "Button_Switch_SMD:SW_Push_1P1T_NO_6x6mm_H9.5mm", "x": 139.7, "y": 76.2}
+  ],
+  "nets": [
+    {
+      "name": "+5V",
+      "pins": [
+        {"ref": "J1", "pin": "VBUS"},
+        {"ref": "C6", "pin": "1"},
+        {"ref": "U2", "pin": "VCC"},
+        {"ref": "C5", "pin": "1"},
+        {"ref": "R1", "pin": "1"},
+        {"ref": "U1", "pin": "VCC"},
+        {"ref": "C3", "pin": "1"},
+        {"ref": "U1", "pin": "AVCC"},
+        {"ref": "C4", "pin": "1"},
+        {"ref": "R2", "pin": "1"},
+        {"ref": "J2", "pin": "Pin_4"},
+        {"ref": "J3", "pin": "Pin_1"},
+        {"ref": "J3", "pin": "Pin_4"}
+      ]
+    },
+    {
+      "name": "GND",
+      "pins": [
+        {"ref": "J1", "pin": "GND"},
+        {"ref": "C6", "pin": "2"},
+        {"ref": "U2", "pin": "GND"},
+        {"ref": "C5", "pin": "2"},
+        {"ref": "C1", "pin": "2"},
+        {"ref": "C2", "pin": "2"},
+        {"ref": "C3", "pin": "2"},
+        {"ref": "C4", "pin": "2"},
+        {"ref": "SW1", "pin": "2"},
+        {"ref": "D1", "pin": "K"},
+        {"ref": "D2", "pin": "K"},
+        {"ref": "U1", "pin": "GND"},
+        {"ref": "J2", "pin": "Pin_2"},
+        {"ref": "J3", "pin": "Pin_2"}
+      ]
+    },
+    {
+      "name": "USB_DP",
+      "pins": [
+        {"ref": "J1", "pin": "D+"},
+        {"ref": "U2", "pin": "UD+"}
+      ]
+    },
+    {
+      "name": "USB_DM",
+      "pins": [
+        {"ref": "J1", "pin": "D-"},
+        {"ref": "U2", "pin": "UD-"}
+      ]
+    },
+    {
+      "name": "UART_TX",
+      "pins": [
+        {"ref": "U2", "pin": "TXD"},
+        {"ref": "U1", "pin": "PD0"}
+      ]
+    },
+    {
+      "name": "UART_RX",
+      "pins": [
+        {"ref": "U2", "pin": "RXD"},
+        {"ref": "U1", "pin": "PD1"}
+      ]
+    },
+    {
+      "name": "DTR_RESET_CAP",
+      "pins": [
+        {"ref": "U2", "pin": "~{DTR}"},
+        {"ref": "C7", "pin": "1"}
+      ]
+    },
+    {
+      "name": "RESET",
+      "pins": [
+        {"ref": "C7", "pin": "2"},
+        {"ref": "R1", "pin": "2"},
+        {"ref": "SW1", "pin": "1"},
+        {"ref": "U1", "pin": "~{RESET}/PC6"},
+        {"ref": "J2", "pin": "Pin_3"},
+        {"ref": "J3", "pin": "Pin_3"}
+      ]
+    },
+    {
+      "name": "XTAL1",
+      "pins": [
+        {"ref": "Y1", "pin": "1"},
+        {"ref": "C1", "pin": "1"},
+        {"ref": "U1", "pin": "XTAL1/PB6"}
+      ]
+    },
+    {
+      "name": "XTAL2",
+      "pins": [
+        {"ref": "Y1", "pin": "2"},
+        {"ref": "C2", "pin": "1"},
+        {"ref": "U1", "pin": "XTAL2/PB7"}
+      ]
+    },
+    {
+      "name": "LED_POWER",
+      "pins": [
+        {"ref": "R2", "pin": "2"},
+        {"ref": "D1", "pin": "A"}
+      ]
+    },
+    {
+      "name": "LED_USER",
+      "pins": [
+        {"ref": "R3", "pin": "2"},
+        {"ref": "D2", "pin": "A"}
+      ]
+    },
+    {
+      "name": "PB5_SCK",
+      "pins": [
+        {"ref": "U1", "pin": "PB5"},
+        {"ref": "R3", "pin": "1"},
+        {"ref": "J3", "pin": "Pin_15"}
+      ]
+    },
+    {
+      "name": "CH340_V3",
+      "pins": [
+        {"ref": "U2", "pin": "V3"},
+        {"ref": "J3", "pin": "Pin_14"}
+      ]
+    },
+    {
+      "name": "PD0_RX",
+      "pins": [
+        {"ref": "U1", "pin": "PD0"},
+        {"ref": "J2", "pin": "Pin_2"}
+      ]
+    },
+    {
+      "name": "PD1_TX",
+      "pins": [
+        {"ref": "U1", "pin": "PD1"},
+        {"ref": "J2", "pin": "Pin_1"}
+      ]
+    },
+    {
+      "name": "PD2_D2",
+      "pins": [
+        {"ref": "U1", "pin": "PD2"},
+        {"ref": "J2", "pin": "Pin_5"}
+      ]
+    },
+    {
+      "name": "PD3_D3",
+      "pins": [
+        {"ref": "U1", "pin": "PD3"},
+        {"ref": "J2", "pin": "Pin_6"}
+      ]
+    },
+    {
+      "name": "PD4_D4",
+      "pins": [
+        {"ref": "U1", "pin": "PD4"},
+        {"ref": "J2", "pin": "Pin_7"}
+      ]
+    },
+    {
+      "name": "PD5_D5",
+      "pins": [
+        {"ref": "U1", "pin": "PD5"},
+        {"ref": "J2", "pin": "Pin_8"}
+      ]
+    },
+    {
+      "name": "PD6_D6",
+      "pins": [
+        {"ref": "U1", "pin": "PD6"},
+        {"ref": "J2", "pin": "Pin_9"}
+      ]
+    },
+    {
+      "name": "PD7_D7",
+      "pins": [
+        {"ref": "U1", "pin": "PD7"},
+        {"ref": "J2", "pin": "Pin_10"}
+      ]
+    },
+    {
+      "name": "PB0_D8",
+      "pins": [
+        {"ref": "U1", "pin": "PB0"},
+        {"ref": "J2", "pin": "Pin_11"}
+      ]
+    },
+    {
+      "name": "PB1_D9",
+      "pins": [
+        {"ref": "U1", "pin": "PB1"},
+        {"ref": "J2", "pin": "Pin_12"}
+      ]
+    },
+    {
+      "name": "PB2_D10",
+      "pins": [
+        {"ref": "U1", "pin": "PB2"},
+        {"ref": "J2", "pin": "Pin_13"}
+      ]
+    },
+    {
+      "name": "PB3_D11",
+      "pins": [
+        {"ref": "U1", "pin": "PB3"},
+        {"ref": "J2", "pin": "Pin_14"}
+      ]
+    },
+    {
+      "name": "PB4_D12",
+      "pins": [
+        {"ref": "U1", "pin": "PB4"},
+        {"ref": "J2", "pin": "Pin_15"}
+      ]
+    },
+    {
+      "name": "PC0_A0",
+      "pins": [
+        {"ref": "U1", "pin": "PC0"},
+        {"ref": "J3", "pin": "Pin_12"}
+      ]
+    },
+    {
+      "name": "PC1_A1",
+      "pins": [
+        {"ref": "U1", "pin": "PC1"},
+        {"ref": "J3", "pin": "Pin_11"}
+      ]
+    },
+    {
+      "name": "PC2_A2",
+      "pins": [
+        {"ref": "U1", "pin": "PC2"},
+        {"ref": "J3", "pin": "Pin_10"}
+      ]
+    },
+    {
+      "name": "PC3_A3",
+      "pins": [
+        {"ref": "U1", "pin": "PC3"},
+        {"ref": "J3", "pin": "Pin_9"}
+      ]
+    },
+    {
+      "name": "PC4_A4_SDA",
+      "pins": [
+        {"ref": "U1", "pin": "PC4"},
+        {"ref": "J3", "pin": "Pin_8"}
+      ]
+    },
+    {
+      "name": "PC5_A5_SCL",
+      "pins": [
+        {"ref": "U1", "pin": "PC5"},
+        {"ref": "J3", "pin": "Pin_7"}
+      ]
+    },
+    {
+      "name": "ADC6_A6",
+      "pins": [
+        {"ref": "U1", "pin": "ADC6"},
+        {"ref": "J3", "pin": "Pin_6"}
+      ]
+    },
+    {
+      "name": "ADC7_A7",
+      "pins": [
+        {"ref": "U1", "pin": "ADC7"},
+        {"ref": "J3", "pin": "Pin_5"}
+      ]
+    },
+    {
+      "name": "AREF_NET",
+      "pins": [
+        {"ref": "U1", "pin": "AREF"},
+        {"ref": "J3", "pin": "Pin_13"}
+      ]
+    }
+  ]
+}

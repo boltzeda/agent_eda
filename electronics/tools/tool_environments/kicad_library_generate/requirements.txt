@@ -1,0 +1,2 @@
+# KiCad s-expression serialization; kicad-cli is supplied by the host.
+sexpdata>=1.0.2,<2

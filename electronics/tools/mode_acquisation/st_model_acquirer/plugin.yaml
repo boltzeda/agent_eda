@@ -1,0 +1,7 @@
+name: st_model_acquirer
+version: 1.0.0
+description: "Retrieve publicly downloadable official STMicroelectronics simulation models without changing the generic model-file-tool resolver."
+author: BoltzmannLabs
+kind: standalone
+provides_tools:
+  - acquire_st_model

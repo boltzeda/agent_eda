@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "package_rules": {
+    "ACS37010_LZ_SOIC6": {
+      "description": "Allegro ACS37010/ACS37012 custom 6-pin SOIC LZ package resolver rule.",
+      "package_match": {
+        "manufacturer": "Allegro MicroSystems",
+        "package_suffix": "LZ",
+        "package_name_contains": "Custom 6-Pin SOIC",
+        "pin_count": 6
+      },
+      "symbol_rule": {
+        "grid_mm": 2.54,
+        "reference_prefix": "U",
+        "body_rectangle_mm": {
+          "x1": -5.08,
+          "y1": 6.35,
+          "x2": 5.08,
+          "y2": -5.08
+        }
+      },
+      "footprint_rule": {
+        "generator": "acs37010_lz_soic6",
+        "coordinate_system": "KiCad footprint top view, positive Y down",
+        "implemented_orientation": "branding_reference_as_drawn",
+        "pad_coordinate_derivation": "Use datasheet land-pattern pad sizes, pitch, and row spacing. Put signal pads on one row and high-current pads on the opposite row.",
+        "pad_numbering_policy": "Candidate numbering from pinout and pin-1 marker; requires explicit review because the land-pattern drawing does not print pad numbers.",
+        "courtyard_clearance_mm": 0.25,
+        "silkscreen_policy": "Use body-edge marker segments outside pad copper; add pin-1 marker only after orientation review."
+      }
+    },
+    "GENERIC_EXPLICIT_PADS": {
+      "description": "Use an explicit KiCad-compatible pad list from the normalized extraction.",
+      "package_match": {},
+      "footprint_rule": {
+        "generator": "explicit_pads",
+        "coordinate_system": "KiCad footprint top view, positive Y down",
+        "courtyard_clearance_mm": 0.25,
+        "silkscreen_policy": "Derive simple silkscreen/fab/courtyard rectangles unless supplied explicitly."
+      }
+    },
+    "GENERIC_DUAL_ROW_SMD": {
+      "description": "Generic draft generator for even-pin-count dual-row SMD packages such as SOIC, SOP, SSOP, TSSOP, MSOP, and similar packages.",
+      "package_match": {
+        "package_name_any_contains": ["SOIC", "SOP", "SSOP", "TSSOP", "MSOP", "HTSSOP", "QSOP"]
+      },
+      "footprint_rule": {
+        "generator": "dual_row_smd",
+        "coordinate_system": "KiCad footprint top view, positive Y down",
+        "pad_shape": "rect",
+        "pitch_mm": 1.27,
+        "pad_size_x_mm": 0.65,
+        "pad_size_y_mm": 1.5,
+        "courtyard_clearance_mm": 0.25,
+        "pad_numbering_policy": "Draft JEDEC-style counter-clockwise numbering; requires orientation review unless explicit pad mapping is provided."
+      }
+    },
+    "GENERIC_SOT_SMD": {
+      "description": "Generic draft generator for SOT-23/SOT-23-5/SOT-23-6 style packages.",
+      "package_match": {
+        "package_name_any_contains": ["SOT-23", "SOT23", "TSOT", "SC-70", "SC70"]
+      },
+      "footprint_rule": {
+        "generator": "sot_smd",
+        "coordinate_system": "KiCad footprint top view, positive Y down",
+        "pad_shape": "rect",
+        "pitch_mm": 0.95,
+        "pad_size_x_mm": 0.7,
+        "pad_size_y_mm": 0.95,
+        "row_center_to_center_y_mm": 1.9,
+        "courtyard_clearance_mm": 0.25,
+        "pad_numbering_policy": "Draft SOT-style numbering; requires orientation review unless exact pads are supplied."
+      }
+    },
+    "GENERIC_QFN_DFN": {
+      "description": "Generic draft generator for QFN/DFN/LGA no-lead packages. Use explicit pads when possible.",
+      "package_match": {
+        "package_name_any_contains": ["QFN", "DFN", "LGA", "WQFN", "UQFN", "VQFN"]
+      },
+      "footprint_rule": {
+        "generator": "qfn_quad_smd",
+        "coordinate_system": "KiCad footprint top view, positive Y down",
+        "pad_shape": "rect",
+        "pitch_mm": 0.5,
+        "pad_size_x_mm": 0.28,
+        "pad_size_y_mm": 0.75,
+        "body_x_mm": 4.0,
+        "body_y_mm": 4.0,
+        "courtyard_clearance_mm": 0.25,
+        "pad_numbering_policy": "Draft quad-side numbering and optional exposed pad; requires orientation review unless exact pads are supplied."
+      }
+    }
+  }
+}

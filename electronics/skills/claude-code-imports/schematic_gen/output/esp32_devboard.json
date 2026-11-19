@@ -1,0 +1,96 @@
+{
+  "components": [
+    {"ref": "U", "type": "regulator", "value": "AMS1117-3.3", "x": 38.1, "y": 38.1},
+    {"ref": "C", "type": "C", "value": "10uF", "x": 25.4, "y": 38.1},
+    {"ref": "C", "type": "C", "value": "10uF", "x": 50.8, "y": 38.1},
+    {"ref": "R", "type": "R", "value": "10k", "x": 88.9, "y": 38.1},
+    {"ref": "R", "type": "R", "value": "4.7k", "x": 114.3, "y": 38.1},
+    {"ref": "R", "type": "R", "value": "330", "x": 88.9, "y": 88.9},
+    {"ref": "R", "type": "R", "value": "330", "x": 114.3, "y": 88.9},
+    {"ref": "C", "type": "C", "value": "100nF", "x": 139.7, "y": 38.1},
+    {"ref": "C", "type": "C", "value": "100nF", "x": 139.7, "y": 88.9},
+    {"ref": "D", "type": "LED", "value": "GREEN", "x": 88.9, "y": 114.3},
+    {"ref": "D", "type": "LED", "value": "RED", "x": 114.3, "y": 114.3},
+    {"ref": "J", "type": "connector_01x04", "value": "PROG", "x": 25.4, "y": 88.9},
+    {"ref": "J", "type": "connector_01x02", "value": "PWR_IN", "x": 25.4, "y": 139.7},
+    {"ref": "SW", "type": "switch", "value": "RESET", "x": 165.1, "y": 38.1}
+  ],
+  "nets": [
+    {
+      "name": "VBUS",
+      "pins": [
+        {"ref": "J2", "pin": "Pin_1"},
+        {"ref": "C1", "pin": "1"},
+        {"ref": "U1", "pin": "3"}
+      ]
+    },
+    {
+      "name": "+3V3",
+      "pins": [
+        {"ref": "U1", "pin": "2"},
+        {"ref": "C2", "pin": "1"},
+        {"ref": "R1", "pin": "1"},
+        {"ref": "R2", "pin": "1"},
+        {"ref": "C3", "pin": "1"}
+      ]
+    },
+    {
+      "name": "GND",
+      "pins": [
+        {"ref": "J2", "pin": "Pin_2"},
+        {"ref": "C1", "pin": "2"},
+        {"ref": "U1", "pin": "1"},
+        {"ref": "C2", "pin": "2"},
+        {"ref": "C4", "pin": "2"},
+        {"ref": "D1", "pin": "K"},
+        {"ref": "D2", "pin": "K"},
+        {"ref": "J1", "pin": "Pin_4"},
+        {"ref": "SW1", "pin": "2"},
+        {"ref": "C3", "pin": "2"}
+      ]
+    },
+    {
+      "name": "IO0",
+      "pins": [
+        {"ref": "R1", "pin": "2"},
+        {"ref": "J1", "pin": "Pin_1"}
+      ]
+    },
+    {
+      "name": "IO2",
+      "pins": [
+        {"ref": "R2", "pin": "2"},
+        {"ref": "R3", "pin": "1"}
+      ]
+    },
+    {
+      "name": "IO4",
+      "pins": [
+        {"ref": "R4", "pin": "1"},
+        {"ref": "J1", "pin": "Pin_2"}
+      ]
+    },
+    {
+      "name": "LED_G",
+      "pins": [
+        {"ref": "R3", "pin": "2"},
+        {"ref": "D1", "pin": "A"}
+      ]
+    },
+    {
+      "name": "LED_R",
+      "pins": [
+        {"ref": "R4", "pin": "2"},
+        {"ref": "D2", "pin": "A"}
+      ]
+    },
+    {
+      "name": "EN",
+      "pins": [
+        {"ref": "C4", "pin": "1"},
+        {"ref": "SW1", "pin": "1"},
+        {"ref": "J1", "pin": "Pin_3"}
+      ]
+    }
+  ]
+}

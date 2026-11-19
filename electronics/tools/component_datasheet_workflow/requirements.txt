@@ -1,0 +1,4 @@
+pypdf>=5,<7
+jsonschema>=4.22,<5
+mineru[pipeline]==3.4.5
+six>=1.16,<2

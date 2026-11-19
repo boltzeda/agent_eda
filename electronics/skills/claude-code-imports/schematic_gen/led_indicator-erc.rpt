@@ -1,0 +1,11 @@
+ERC report (2026-05-16T15:02:07+0000, Encoding UTF8)
+
+***** Sheet /
+[lib_symbol_mismatch]: Symbol 'PWR_FLAG' doesn't match copy in library 'power'
+    ; warning
+    @(10.16 mm, 53.34 mm): Symbol #FLG001 [PWR_FLAG]
+[lib_symbol_mismatch]: Symbol 'R' doesn't match copy in library 'Device'
+    ; warning
+    @(76.20 mm, 50.80 mm): Symbol R1 [R]
+
+ ** ERC messages: 2  Errors 0  Warnings 2

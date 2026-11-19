@@ -1,0 +1,11 @@
+# Combined Python dependencies for the bundled preprocessor, placement tool,
+# and LineExplore router. The preprocessor itself uses only the standard library.
+# Select Python compatible with these packages and the host KiCad pcbnew binding.
+torch==2.5.1
+numpy==2.4.3
+networkx==3.6.1
+deap==1.4.3
+shapely==2.1.2
+
+# Host dependencies (provided by the OS/Agent-EDA, not installed by pip or this
+# workflow): KiCad pcbnew and footprint libraries, plus kicad-cli for native DRC.

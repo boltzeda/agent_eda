@@ -1,0 +1,7 @@
+name: nxp_model_acquirer
+version: 1.0.0
+description: "Retrieve publicly downloadable official NXP Semiconductors simulation models without changing the generic model resolver."
+author: BoltzmannLabs
+kind: standalone
+provides_tools:
+  - acquire_nxp_model

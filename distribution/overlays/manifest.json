@@ -1,0 +1,71 @@
+{
+  "schema": 1,
+  "core_adapters": [
+    {
+      "path": "hermes_cli/_parser.py",
+      "product_sha256": "e74eabe97abc746a3811b1e4e03af3c9626e75cebe0ebc5b21137efbbfdd33d8",
+      "upstream_sha256": {
+        "baseline": "5b3f30a1e48799d563fdceec337c31c49f395242b80742ef15f6799e47e83cb3",
+        "candidate": "e9f0fbb367a32cbfc8f144b28c3f4ff6d0956003fbb1a0c09f3c487f4bf19311"
+      },
+      "purpose": "Expose the eda command and Agent-EDA help text.",
+      "consumer": "Hermes classic CLI startup and rendering",
+      "removal_condition": "A supported upstream skin/branding extension covers the same behavior without replacing core files."
+    },
+    {
+      "path": "hermes_cli/banner.py",
+      "product_sha256": "3a0f3ef10d2dc7ac6398cbe3cf29e8038a74272b8f367eeccf08d7b0dfc899b7",
+      "upstream_sha256": {
+        "baseline": "f531013df98f03bf2a2b2c3d0f6a3625c5027748817f4a9e673a1e876ad2e62d",
+        "candidate": "1d1b0cde2aa2716584974f61126709efc4bca18c69ebd34e02b6cca786a1ba92"
+      },
+      "purpose": "Render the purple Agent-EDA banner and circuit logo.",
+      "consumer": "Hermes classic CLI startup and rendering",
+      "removal_condition": "A supported upstream skin/branding extension covers the same behavior without replacing core files."
+    },
+    {
+      "path": "hermes_cli/cli_modern_layout.py",
+      "product_sha256": "88aba929ceffc7abb5e442d2262ae9a02bd69769c710dcd991713c2d561ad77d",
+      "upstream_sha256": {
+        "baseline": "73e91b9bebebeb676c9b66cfe014652b8a0383cff8095b0476c93ab67865f3d4",
+        "candidate": "73e91b9bebebeb676c9b66cfe014652b8a0383cff8095b0476c93ab67865f3d4"
+      },
+      "purpose": "Render Agent-EDA response labels and purple modern CLI accents.",
+      "consumer": "Hermes classic CLI status and modern layout",
+      "removal_condition": "A supported upstream presentation extension covers the same behavior without replacing core files."
+    },
+    {
+      "path": "hermes_cli/cli_render.py",
+      "product_sha256": "1f35998607724780f2b1f753afc5e6f5470e062f8f57ea00d7c61c1fe548a9d2",
+      "upstream_sha256": {
+        "baseline": "be57aa2da283d4a8d50086557b56c9f42d8d7f78866c6ff6f536c49e04503bf8",
+        "candidate": "2a6e11cfb200ea46159c3c4a3c4aecbb0cf2a353070187610a94a0d62e12b546"
+      },
+      "purpose": "Keep compact CLI labels and purple accents consistent.",
+      "consumer": "Hermes classic CLI startup and rendering",
+      "removal_condition": "A supported upstream skin/branding extension covers the same behavior without replacing core files."
+    },
+    {
+      "path": "hermes_cli/cli_status_bar_mixin.py",
+      "product_sha256": "9cbbead68556773eff39617d18467592594ff9a8331ebe3b82d7f82646705621",
+      "upstream_sha256": {
+        "baseline": "d9b14d5dfb89d8dab5940398d33b108abfef784db9d6cac181492df981bda1dc",
+        "candidate": "d9b14d5dfb89d8dab5940398d33b108abfef784db9d6cac181492df981bda1dc"
+      },
+      "purpose": "Render the circuit-node context meter with correct unknown and used states.",
+      "consumer": "Hermes classic CLI status and modern layout",
+      "removal_condition": "A supported upstream presentation extension covers the same behavior without replacing core files."
+    },
+    {
+      "path": "hermes_cli/skin_engine.py",
+      "product_sha256": "e84db0ca15da18ca77e8f4479302b401ff11586df26bceb00a94c60448bdc19c",
+      "upstream_sha256": {
+        "baseline": "3de7f03af66f259efe4c5048ee7a74a4c262e6fd3ac5eb273a5a715232378ac7",
+        "candidate": "3de7f03af66f259efe4c5048ee7a74a4c262e6fd3ac5eb273a5a715232378ac7"
+      },
+      "purpose": "Provide the Agent-EDA default palette and response identity.",
+      "consumer": "Hermes classic CLI startup and rendering",
+      "removal_condition": "A supported upstream skin/branding extension covers the same behavior without replacing core files."
+    }
+  ]
+}

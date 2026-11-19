@@ -1,0 +1,8 @@
+ERC report (2026-05-17T06:06:09+0000, Encoding UTF8)
+
+***** Sheet /
+[pin_not_connected]: Pin not connected
+    ; error
+    @(20.32 mm, 68.58 mm): Symbol J1 Pin 4 [Pin_4, Passive, Line]
+
+ ** ERC messages: 1  Errors 1  Warnings 0

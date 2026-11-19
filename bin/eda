@@ -1,0 +1,129 @@
+#!/usr/bin/env python3
+"""Run the independently assembled Agent-EDA prototype and show upstream status."""
+from __future__ import annotations
+
+import json
+import hashlib
+import os
+from pathlib import Path
+import subprocess
+import sys
+from urllib.request import Request, urlopen
+
+PRODUCT = Path(__file__).resolve().parents[1]
+WORKSPACE = PRODUCT.parent
+REFERENCE = WORKSPACE / 'upstream/hermes'
+LOCK = PRODUCT / 'distribution/upstream.lock.json'
+ACTIVE = WORKSPACE / 'data/active_build.json'
+LOCAL = WORKSPACE / 'data/local_install.json'
+
+
+def local_install() -> dict | None:
+    if not LOCAL.is_file():
+        return None
+    record = json.loads(LOCAL.read_text())
+    if not isinstance(record, dict) or not all(isinstance(record.get(key), str)
+                                                for key in ('build', 'home', 'assembly_manifest_sha256')):
+        raise SystemExit('Agent-EDA local installation record is invalid; rerun setup.py')
+    build = WORKSPACE / 'builds' / record['build']
+    home = WORKSPACE / 'data' / record['home']
+    if (build.parent != WORKSPACE / 'builds' or home.parent != WORKSPACE / 'data'
+            or build.is_symlink() or home.is_symlink()):
+        raise SystemExit('Agent-EDA local installation paths are invalid; rerun setup.py')
+    manifest = build / '.agent-eda-assembly.json'
+    if not manifest.is_file() or hashlib.sha256(manifest.read_bytes()).hexdigest() != record['assembly_manifest_sha256']:
+        raise SystemExit('Agent-EDA local build changed; rerun setup.py')
+    return {'build': build, 'home': home}
+
+
+def selected_build() -> Path:
+    if os.environ.get('AGENT_EDA_BUILD'):
+        return Path(os.environ['AGENT_EDA_BUILD']).resolve()
+    if not ACTIVE.is_file():
+        installed = local_install()
+        if installed:
+            return installed['build']
+        raise SystemExit(f'Agent-EDA is not installed. Run: python3 {PRODUCT / "setup.py"}')
+    record = json.loads(ACTIVE.read_text())
+    build = WORKSPACE / 'builds' / record['build']
+    report = Path(record['report'])
+    if (build.is_symlink() or build.parent != WORKSPACE / 'builds'
+            or not report.is_file() or not report.is_relative_to(WORKSPACE / 'evidence')):
+        raise SystemExit('Agent-EDA active build record is invalid')
+    hash_file = lambda path: hashlib.sha256(path.read_bytes()).hexdigest()
+    if (hash_file(report) != record['report_sha256']
+            or hash_file(build / '.agent-eda-assembly.json') != record['assembly_manifest_sha256']
+            or json.loads(report.read_text()).get('qualified') is not True):
+        raise SystemExit('Agent-EDA active build no longer matches its qualification evidence')
+    return build
+
+
+def status(build: Path) -> str:
+    lock = json.loads(LOCK.read_text())
+    source = json.loads((build / '.agent-eda-assembly.json').read_text())
+    baseline, candidate = source['upstream']['commit'], lock['candidate']['commit']
+    if baseline == candidate:
+        return f"Agent-EDA: Hermes {source['upstream']['tag']} is the selected candidate (0 commits behind)."
+    if not REFERENCE.is_dir():
+        return 'Agent-EDA: upstream reference unavailable; commit gap unknown.'
+    def git(*args: str) -> str:
+        return subprocess.check_output(['git', '-C', str(REFERENCE), *args], text=True, timeout=10).strip()
+    try:
+        if git('rev-parse', '--is-shallow-repository') != 'false':
+            raise ValueError('shallow history')
+        subprocess.run(['git', '-C', str(REFERENCE), 'merge-base', '--is-ancestor', baseline, candidate],
+                       check=True, timeout=10, stdout=subprocess.DEVNULL)
+        count = int(git('rev-list', '--count', f'{baseline}..{candidate}'))
+    except (OSError, ValueError, subprocess.CalledProcessError, subprocess.TimeoutExpired):
+        return 'Agent-EDA: commit ancestry unavailable; upstream gap unknown.'
+    return f"Agent-EDA: Hermes {source['upstream']['tag']} is {count:,} commits behind {lock['candidate']['tag']} (upgrade pending qualification)."
+
+
+def latest_release() -> str:
+    """Read the current stable tag; this never installs or changes the pin."""
+    request = Request('https://api.github.com/repos/NousResearch/hermes-agent/releases/latest',
+                      headers={'Accept': 'application/vnd.github+json', 'User-Agent': 'agent-eda-update-check'})
+    with urlopen(request, timeout=8) as response:
+        return json.load(response)['tag_name']
+
+
+def main() -> int:
+    build = selected_build().resolve()
+    installed = local_install() if not ACTIVE.is_file() else None
+    default_home = installed['home'] if installed and installed['build'].resolve() == build else WORKSPACE / 'data/agent_eda-guarded'
+    home = Path(os.environ.get('AGENT_EDA_HOME', default_home)).resolve()
+    if not (build / '.agent-eda-assembly.json').is_file():
+        raise SystemExit(f'Agent-EDA build is unavailable: {build}')
+    message = status(build)
+    if '--status' in sys.argv[1:]:
+        print(message)
+        return 0
+    if '--check-upstream' in sys.argv[1:]:
+        print(message)
+        try:
+            current = latest_release()
+        except (OSError, KeyError, ValueError) as error:
+            print(f'Could not check the latest stable release: {error}', file=sys.stderr)
+            return 1
+        print(f'Latest stable Hermes release: {current}. Pin stays unchanged.')
+        return 0
+    if len(sys.argv) > 1 and sys.argv[1] == 'update':
+        print(message)
+        print('Agent-EDA upgrades use the pinned candidate qualification process; use --check-upstream to inspect releases.')
+        return 2
+    if not (home / 'config.yaml').is_file():
+        raise SystemExit('Isolated profile is not installed; run distribution/scripts/install_profile.py first.')
+    native_python = build / '.venv' / ('Scripts/python.exe' if os.name == 'nt' else 'bin/python')
+    if not native_python.is_file():
+        raise SystemExit(f'Pinned runtime environment is missing: {native_python}. Run uv sync --locked --no-dev --python 3.14 in {build}.')
+    if Path(sys.executable).resolve() != native_python.resolve():
+        os.execv(str(native_python), [str(native_python), str(Path(__file__).resolve()), *sys.argv[1:]])
+    print(message, flush=True)
+    os.environ['HERMES_HOME'] = str(home)
+    sys.path.insert(0, str(build))
+    from hermes_cli.main import main as hermes_main
+    return hermes_main() or 0
+
+
+if __name__ == '__main__':
+    raise SystemExit(main())

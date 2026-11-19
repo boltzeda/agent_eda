@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# Source this file to make this checkout's Agent-EDA launcher active in Bash or Zsh.
+if [ -n "${ZSH_VERSION-}" ]; then
+  _agent_eda_source="${(%):-%x}"
+else
+  _agent_eda_source="${BASH_SOURCE[0]}"
+fi
+_agent_eda_root="$(cd "$(dirname "$_agent_eda_source")" && pwd)"
+case ":$PATH:" in
+  *":$_agent_eda_root/bin:"*) ;;
+  *) export PATH="$_agent_eda_root/bin:$PATH" ;;
+esac
+export AGENT_EDA_LAUNCHER="$_agent_eda_root/bin/eda"
+eda() { "$AGENT_EDA_LAUNCHER" "$@"; }
+unset _agent_eda_root _agent_eda_source

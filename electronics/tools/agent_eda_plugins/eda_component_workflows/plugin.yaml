@@ -1,0 +1,12 @@
+name: eda_component_workflows
+version: 1.0.0
+description: "Prepare component datasheets and find or generate KiCad libraries."
+author: Agent-EDA
+kind: standalone
+python_runtime: external
+provides_tools:
+  - component_datasheet_prepare
+  - component_datasheet_parse
+  - component_schema_validate
+  - kicad_library_find
+  - kicad_library_generate

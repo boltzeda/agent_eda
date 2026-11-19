@@ -1,0 +1,81 @@
+{
+  "baseline": "3b421578588243f920886e6fe79a6faa87ea026e",
+  "candidate": "ae2a81ccc00e9b7c06301523e5bb09608397149c",
+  "paths": {
+    "agent/turn_failure_copy.py": {
+      "contract_check": "Verify product OAuth guidance; native Hermes literal-command test is an intentional branding divergence.",
+      "required_candidate_markers": [
+        "FailoverReason.guardrail_blocked.value",
+        "return f\"eda {profile_cli_selector()}auth add {slug} --type oauth\""
+      ],
+      "resolution": "Candidate source keeps guardrail and external-login guidance; the product changes only its OAuth CLI command to eda.",
+      "upstream_diff_sha256": "a251aed4d198fefaf0d8c158052dd9a63ef3ea762845d49f986d0481df3798a7"
+    },
+    "hermes_cli/_parser.py": {
+      "contract_check": "Verify scan_profile_flag and gateway_run_no_supervise remain available; run CLI help and profile tests.",
+      "required_candidate_markers": [
+        "def scan_profile_flag(",
+        "def gateway_run_no_supervise(",
+        "eda fallback check [--live]"
+      ],
+      "resolution": "Candidate parser retains the upstream profile scanner and fallback-check option; Agent-EDA command text stays in the owned overlay.",
+      "upstream_diff_sha256": "92eec6695f2975f246e7aee8aa204becc70bf41699c2d6f841e402d2e06ae4d3"
+    },
+    "hermes_cli/auth_nous.py": {
+      "contract_check": "Verify Nous login guard and native auth tests.",
+      "required_candidate_markers": [
+        "Nous Portal login is disabled in Agent-EDA"
+      ],
+      "resolution": "The guard is inserted into candidate source; other upstream authentication changes remain present.",
+      "upstream_diff_sha256": "1067734616c1c158b2449500478f2a3d462e3ccb614c4704818a7bf6860ca5be"
+    },
+    "hermes_cli/banner.py": {
+      "contract_check": "Verify project_root_str import and status/banner smoke.",
+      "required_candidate_markers": [
+        "from hermes_cli._startup_fast import project_root_str",
+        "repo_dir = Path(project_root_str())"
+      ],
+      "resolution": "Candidate overlay retains upstream project_root_str repository lookup and Agent-EDA branding.",
+      "upstream_diff_sha256": "be0689e8ab1a0f4e378127697a4feae85f3e1c5ee100f204a1fa2420945fdc06"
+    },
+    "hermes_cli/cli_commands_mixin.py": {
+      "contract_check": "Verify /update refusal and handoff native tests.",
+      "required_candidate_markers": [
+        "from gateway.handoff_target import HandoffTargetError, resolve_handoff_home",
+        "Agent-EDA updates require a qualified pinned build"
+      ],
+      "resolution": "The /update guard is inserted into candidate source; new handoff ownership logic remains present.",
+      "upstream_diff_sha256": "98ea32634433e6e9f604673bbfbbb899a150db1362073560ca39582d3fa8419d"
+    },
+    "hermes_cli/cli_render.py": {
+      "contract_check": "Verify toolcall in _TOOL_CALL_TAGS and CLI render smoke.",
+      "required_candidate_markers": [
+        "\"function_calls\", \"toolcall\""
+      ],
+      "resolution": "Candidate overlay retains upstream toolcall tag handling and Agent-EDA rendering.",
+      "upstream_diff_sha256": "ca7a279f0b99f428c1b44fb89b630f8e02b1289be34c7592a70faea82518bb11"
+    },
+    "hermes_cli/cli_tui_mixin.py": {
+      "contract_check": "Verify picker display and selection tests.",
+      "forbidden_candidate_markers": [
+        "interrupt_debug.log"
+      ],
+      "required_candidate_markers": [
+        "p['name']}  \u00b7 set up"
+      ],
+      "resolution": "Candidate source keeps upstream interrupt-debug removal; the product patch labels unconfigured providers.",
+      "upstream_diff_sha256": "8f00ad39d23af0d0f9809681053eb48961691c0756f55b53f2c294f8c9ce71e3"
+    },
+    "hermes_cli/main.py": {
+      "contract_check": "Verify native update refusal, profile scanning and CLI launch.",
+      "required_candidate_markers": [
+        "from hermes_cli._parser import gateway_run_no_supervise",
+        "from hermes_cli._parser import scan_profile_flag",
+        "Agent-EDA updates require a qualified pinned build"
+      ],
+      "resolution": "The native update guard is inserted into candidate source; upstream profile scanner migration and gateway supervision changes remain present.",
+      "upstream_diff_sha256": "9b83c22df7ee5c90fbf6a6905213a7d261dfd687100b281df4aed7ccc3b25856"
+    }
+  },
+  "schema": 1
+}

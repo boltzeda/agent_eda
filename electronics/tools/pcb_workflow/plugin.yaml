@@ -1,0 +1,8 @@
+name: pcb-workflow
+version: 0.1.0
+description: "Approval-gated KiCad PCB preprocessing, placement, and routing workflow."
+author: BoltzPCB
+kind: standalone
+python_runtime: external
+provides_tools:
+  - pcb_workflow

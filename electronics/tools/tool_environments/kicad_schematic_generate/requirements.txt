@@ -1,0 +1,1 @@
+-e ../../kicad_generation/vendor/circuit-synth

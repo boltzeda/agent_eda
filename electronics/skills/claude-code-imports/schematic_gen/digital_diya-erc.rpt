@@ -1,0 +1,59 @@
+ERC report (2026-05-18T06:14:41+0000, Encoding UTF8)
+
+***** Sheet /
+[missing_power_pin]: Symbol U2 has input power pins in units [ C ] that are not placed.
+    ; error
+    @(101.60 mm, 101.60 mm): Symbol U2 [LM358]
+[lib_symbol_mismatch]: Symbol 'PWR_FLAG' doesn't match copy in library 'power'
+    ; warning
+    @(5.08 mm, 66.04 mm): Symbol #FLG002 [PWR_FLAG]
+[lib_symbol_mismatch]: Symbol 'SW_Push' doesn't match copy in library 'Switch'
+    ; warning
+    @(50.80 mm, 63.50 mm): Symbol SW1 [SW_Push]
+[lib_symbol_mismatch]: Symbol 'C' doesn't match copy in library 'Device'
+    ; warning
+    @(76.20 mm, 50.80 mm): Symbol C1 [C]
+[lib_symbol_mismatch]: Symbol 'PWR_FLAG' doesn't match copy in library 'power'
+    ; warning
+    @(71.12 mm, 63.50 mm): Symbol #FLG001 [PWR_FLAG]
+[lib_symbol_mismatch]: Symbol 'AMS1117-3.3' doesn't match copy in library 'Regulator_Linear'
+    ; warning
+    @(101.60 mm, 63.50 mm): Symbol U1 [AMS1117-3.3]
+[unconnected_wire_endpoint]: Unconnected wire endpoint
+    ; warning
+    @(99.06 mm, 93.98 mm): Vertical Wire, length 7.62 mm
+[lib_symbol_mismatch]: Symbol 'R' doesn't match copy in library 'Device'
+    ; warning
+    @(50.80 mm, 127.00 mm): Symbol R1 [R]
+[missing_input_pin]: Symbol U2 has input pins in units [ B ] that are not placed.
+    ; warning
+    @(101.60 mm, 101.60 mm): Symbol U2 [LM358]
+[missing_unit]: Symbol U2 has unplaced units [ B, C ]
+    ; warning
+    @(101.60 mm, 101.60 mm): Symbol U2 [LM358]
+[unconnected_wire_endpoint]: Unconnected wire endpoint
+    ; warning
+    @(99.06 mm, 109.22 mm): Vertical Wire, length 7.62 mm
+[lib_symbol_mismatch]: Symbol 'R' doesn't match copy in library 'Device'
+    ; warning
+    @(76.20 mm, 127.00 mm): Symbol R2 [R]
+[lib_symbol_mismatch]: Symbol 'R' doesn't match copy in library 'Device'
+    ; warning
+    @(127.00 mm, 127.00 mm): Symbol R3 [R]
+[lib_symbol_mismatch]: Symbol 'C' doesn't match copy in library 'Device'
+    ; warning
+    @(101.60 mm, 152.40 mm): Symbol C3 [C]
+[lib_symbol_mismatch]: Symbol 'R' doesn't match copy in library 'Device'
+    ; warning
+    @(152.40 mm, 127.00 mm): Symbol R4 [R]
+[lib_symbol_mismatch]: Symbol 'Q_NPN' doesn't match copy in library 'Device'
+    ; warning
+    @(177.80 mm, 127.00 mm): Symbol Q1 [Q_NPN]
+[lib_symbol_mismatch]: Symbol 'R' doesn't match copy in library 'Device'
+    ; warning
+    @(203.20 mm, 152.40 mm): Symbol R5 [R]
+[lib_symbol_mismatch]: Symbol 'R' doesn't match copy in library 'Device'
+    ; warning
+    @(228.60 mm, 152.40 mm): Symbol R6 [R]
+
+ ** ERC messages: 18  Errors 1  Warnings 17

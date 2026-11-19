@@ -1,0 +1,82 @@
+{
+  "schema": 1,
+  "patches": [
+    {
+      "schema": 1,
+      "path": "hermes_cli/auth_nous.py",
+      "upstream_sha256": {
+        "baseline": "d8bf8b86ca0ee3302681f0498dd53b630d3429b773c54a8fffb142c0560c002f",
+        "candidate": "65d3f24d6f796577ad61093f4a39163a011471fb76de350ece5e5e43f3fceb85"
+      },
+      "functions": [
+        "_nous_device_code_login",
+        "_login_nous"
+      ],
+      "purpose": "Disable Nous Portal login in Agent-EDA.",
+      "consumer": "Provider authentication command paths",
+      "removal_condition": "Upstream exposes a supported configuration that disables Nous Portal login.",
+      "guard": "disable_nous_login"
+    },
+    {
+      "path": "hermes_cli/cli_commands_mixin.py",
+      "upstream_sha256": {
+        "baseline": "10e810d3ef4f1b68ad91433a0d7b8bd29e3f213021ff4755f343ab845b358fe9",
+        "candidate": "056481ba2160519017e03acd02000f41207a868f3f7e48a35e4130f75efbc0ae"
+      },
+      "functions": [
+        "_handle_update_command"
+      ],
+      "guard": "disable_slash_update",
+      "purpose": "Keep /update inside the chat session and require the pinned candidate upgrade process.",
+      "consumer": "Agent-EDA update commands",
+      "removal_condition": "Upstream exposes a supported managed-update callback for product distributions."
+    },
+    {
+      "path": "hermes_cli/cli_model_switch_mixin.py",
+      "upstream_sha256": {
+        "baseline": "18b4769ba4d6f46d83f088e07953550e7021c1d684bde1be324c563291695ef2",
+        "candidate": "18b4769ba4d6f46d83f088e07953550e7021c1d684bde1be324c563291695ef2"
+      },
+      "guard": "show_unconfigured_model_providers",
+      "purpose": "Show all provider setup options in /model while excluding Nous Portal.",
+      "consumer": "Agent-EDA CLI model picker",
+      "removal_condition": "Upstream supports a configurable provider inventory in the CLI picker."
+    },
+    {
+      "path": "hermes_cli/cli_tui_mixin.py",
+      "upstream_sha256": {
+        "baseline": "3e37ca1c5ada219280225c445977a696f6c609399f33377d861590a62ab2eb1c",
+        "candidate": "637ee913f82aa0d6f1e0e4ee8c2d72da1e0474a92177b9d3d0a0f0121912452a"
+      },
+      "guard": "label_unconfigured_model_providers",
+      "purpose": "Mark unauthenticated model providers as setup options.",
+      "consumer": "Agent-EDA CLI model picker display",
+      "removal_condition": "Upstream displays setup state in the CLI picker."
+    },
+    {
+      "path": "agent/turn_failure_copy.py",
+      "upstream_sha256": {
+        "baseline": "6c4c0f7a4af80bae9961a271cc75d46f772ba60af7cf1f790889d3a808499e34",
+        "candidate": "8677dbf2a4b512f6ad740e526706a35fefc9dcc359c710c8160703f286d34edc"
+      },
+      "guard": "brand_oauth_relogin_command",
+      "purpose": "Tell Agent-EDA users to authenticate with the eda launcher.",
+      "consumer": "OAuth failure guidance",
+      "removal_condition": "Upstream supports a configurable CLI program name."
+    },
+    {
+      "path": "hermes_cli/main.py",
+      "upstream_sha256": {
+        "baseline": "321236ee6372d077b028d5618e62e3aeb8a69119dcd206428d2025252e1c4df4",
+        "candidate": "ddd293e9e7a6e8c7657659c5c6645d27bc0dc671dae37deb7348c1afb1444ffb"
+      },
+      "functions": [
+        "cmd_update"
+      ],
+      "guard": "disable_native_update",
+      "purpose": "Prevent the native Hermes updater from changing an assembled Agent-EDA build and hide disabled Nous Portal from provider setup.",
+      "consumer": "Agent-EDA update commands and provider selection",
+      "removal_condition": "Upstream exposes a supported managed-update callback for product distributions."
+    }
+  ]
+}

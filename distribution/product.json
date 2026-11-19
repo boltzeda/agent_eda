@@ -1,0 +1,7 @@
+{
+  "name": "Agent-EDA",
+  "publisher": "BoltzPCB",
+  "launcher": "eda",
+  "profile_home": "data/agent_eda",
+  "upstream_channel": "stable"
+}
