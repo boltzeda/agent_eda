@@ -141,6 +141,32 @@ def patch_cli_provider_selection(source: str, path: str) -> str:
     return source
 
 
+def patch_windows_radio_picker(source: str, path: str) -> str:
+    """Use prompt_toolkit's scrolling radio picker where curses is unavailable on Windows."""
+    old = ('    """Text-based numbered fallback for radio selection (section titles printed, never numbered)."""\n'
+           '    print(color(f"\\n  {title}", Colors.YELLOW))')
+    new = ('    """Use an arrow-key picker on Windows; retain the numbered terminal fallback elsewhere."""\n'
+           '    if sys.platform == "win32":\n'
+           '        from prompt_toolkit.shortcuts import radiolist_dialog\n'
+           '        choice = radiolist_dialog(\n'
+           '            title=title, text="Up/Down to select, Enter to confirm; Tab to Cancel",\n'
+           '            values=[(i, f"{headings[i]} — {radio_item_plain(item)}"\n'
+           '                     if headings and i in headings else radio_item_plain(item))\n'
+           '                    for i, item in enumerate(items)],\n'
+           '            default=selected,\n'
+           '        ).run()\n'
+           '        if choice is None:\n'
+           '            _notify_scoped_navigation(MenuNavigationEvent.CANCEL)\n'
+           '            return cancel_returns\n'
+           '        return choice\n'
+           '    print(color(f"\\n  {title}", Colors.YELLOW))')
+    if source.count(old) != 1:
+        raise ValueError(f'Windows radio picker anchor changed in {path}')
+    source = source.replace(old, new, 1)
+    compile(source, path, 'exec')
+    return source
+
+
 def assemble(product: Path, reference: Path, output: Path, selected: str = 'baseline',
              progress: Callable[[str], None] | None = None) -> dict:
     def announce(message: str) -> None:
@@ -240,7 +266,10 @@ def assemble(product: Path, reference: Path, output: Path, selected: str = 'base
                 if entry['guard'] == 'disable_native_update':
                     patched = patch_cli_provider_selection(patched, entry['path'])
             else:
-                patched = patch_model_picker(target.read_text(encoding='utf-8'), entry['path'], entry['guard'])
+                if entry['guard'] == 'windows_radio_picker':
+                    patched = patch_windows_radio_picker(target.read_text(encoding='utf-8'), entry['path'])
+                else:
+                    patched = patch_model_picker(target.read_text(encoding='utf-8'), entry['path'], entry['guard'])
             target.write_text(patched, encoding='utf-8')
             replaced[entry['path']] = {
                 'upstream_sha256': entry['upstream_sha256'][selected],

@@ -43,6 +43,18 @@
       "removal_condition": "Upstream supports a configurable provider inventory in the CLI picker."
     },
     {
+      "path": "hermes_cli/curses_ui.py",
+      "upstream_sha256": {
+        "baseline": "c11cc3766adf35a9c69dbb1e330fa29acf8dd1dc37bf02e32c8dc4f4c5416131",
+        "candidate": "c11cc3766adf35a9c69dbb1e330fa29acf8dd1dc37bf02e32c8dc4f4c5416131"
+      },
+      "functions": ["_radio_numbered_fallback"],
+      "guard": "windows_radio_picker",
+      "purpose": "Allow arrow-key scrolling through provider setup choices on Windows, where curses is unavailable.",
+      "consumer": "Agent-EDA provider setup menus",
+      "removal_condition": "Upstream provides an arrow-key radio picker on Windows."
+    },
+    {
       "path": "hermes_cli/cli_tui_mixin.py",
       "upstream_sha256": {
         "baseline": "3e37ca1c5ada219280225c445977a696f6c609399f33377d861590a62ab2eb1c",
