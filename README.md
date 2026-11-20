@@ -20,15 +20,45 @@ needs a Python interpreter that can import KiCad's `pcbnew` binding.
 git clone https://github.com/boltzeda/agent_eda.git
 cd agent_eda
 python3 setup.py
-source ./activate
-eda model
-eda
 ```
 
-Sourcing this checkout's `activate` selects its launcher even if an older
-Agent-EDA checkout previously defined an `eda` shell function. A plain `eda`
-command in a new shell uses whichever executable is first on `PATH`; check
-`command -v eda` if multiple checkouts are installed.
+On Windows, use `py -3 setup.py` in place of `python3 setup.py`.
+
+### Make `eda` available from any directory
+
+Run the command for your shell **once from the cloned `agent_eda` directory**.
+It adds this clone's absolute `bin` directory to your user PATH. Then close and
+reopen the terminal (and fully reopen VS Code if using its terminal). You can
+type `eda` from any directory without running an activation script again.
+
+Windows Command Prompt:
+
+```bat
+powershell -NoProfile -Command "$b=(Resolve-Path .\bin).Path; $u=[Environment]::GetEnvironmentVariable('Path','User'); $v=@($u -split ';' | Where-Object {$_}); if ($v -notcontains $b) {[Environment]::SetEnvironmentVariable('Path', (($v + @($b)) -join ';'), 'User')}"
+```
+
+Windows PowerShell:
+
+```powershell
+$b=(Resolve-Path .\bin).Path; $u=[Environment]::GetEnvironmentVariable('Path','User'); $v=@($u -split ';' | Where-Object {$_}); if ($v -notcontains $b) {[Environment]::SetEnvironmentVariable('Path', (($v + @($b)) -join ';'), 'User')}
+```
+
+Linux Bash:
+
+```bash
+printf '\nexport PATH="%s/bin:$PATH"\n' "$PWD" >> ~/.bashrc
+```
+
+macOS Zsh:
+
+```zsh
+printf '\nexport PATH="%s/bin:$PATH"\n' "$PWD" >> ~/.zshrc
+```
+
+In a new terminal, run `eda model` to select a provider, then `eda` to chat.
+If multiple Agent-EDA clones are installed, check which launcher is first with
+`where eda` on Windows or `command -v eda` on Linux and macOS. The `activate`
+scripts remain available for temporary use in a single terminal.
 
 Windows Git may use CRLF checkout line endings. Setup verifies the reviewed
 CLI adapters after normalizing those line endings, and the repository requests
@@ -43,10 +73,7 @@ private Agent-EDA profile. The downloads and private environments can take
 time and disk space. Rerunning `python3 setup.py` resumes an interrupted
 installation without overwriting a configured profile.
 
-For macOS, use the same commands in a shell with `python3` and `uv`. For
-Windows PowerShell, run `py -3 setup.py`, then `. .\activate.ps1` and
-`eda model`; in Command Prompt use `py -3 setup.py`, `call activate.cmd`,
-and `eda model`. If KiCad's `pcbnew` binding is attached to a particular Python, pass
+If KiCad's `pcbnew` binding is attached to a particular Python, pass
 `--pcb-python <path>` to setup. The runtime launcher accepts `AGENT_EDA_HOME`
 and `AGENT_EDA_BUILD` overrides for maintainers. Linux is the verified setup
 host; native macOS and Windows installation checks remain open.
