@@ -16,49 +16,76 @@ Install KiCad, including its symbol and footprint libraries and `kicad-cli`,
 for native schematic and PCB work. The PCB placement and routing tool also
 needs a Python interpreter that can import KiCad's `pcbnew` binding.
 
-```bash
+### 1. Clone and install
+
+Linux and macOS:
+
+```sh
 git clone https://github.com/boltzeda/agent_eda.git
 cd agent_eda
 python3 setup.py
 ```
 
-On Windows, use `py -3 setup.py` in place of `python3 setup.py`.
+Windows Command Prompt or PowerShell:
 
-### Make `eda` available from any directory
+```text
+git clone https://github.com/boltzeda/agent_eda.git
+cd agent_eda
+py -3 setup.py
+```
+
+Wait for `Agent-EDA ready` before continuing. Setup creates the runtime and
+private tool environments; it does not change your shell's PATH.
+
+### 2. Make `eda` available from any directory
 
 Run the command for your shell **once from the cloned `agent_eda` directory**.
-It adds this clone's absolute `bin` directory to your user PATH. Then close and
-reopen the terminal (and fully reopen VS Code if using its terminal). You can
-type `eda` from any directory without running an activation script again.
+It saves this clone's absolute `bin` directory for future terminals. The second
+line makes `eda` available immediately in the terminal you are using now.
 
 Windows Command Prompt:
 
 ```bat
 powershell -NoProfile -Command "$b=(Resolve-Path .\bin).Path; $u=[Environment]::GetEnvironmentVariable('Path','User'); $v=@($u -split ';' | Where-Object {$_}); if ($v -notcontains $b) {[Environment]::SetEnvironmentVariable('Path', (($v + @($b)) -join ';'), 'User')}"
+set "PATH=%CD%\bin;%PATH%"
 ```
 
 Windows PowerShell:
 
 ```powershell
 $b=(Resolve-Path .\bin).Path; $u=[Environment]::GetEnvironmentVariable('Path','User'); $v=@($u -split ';' | Where-Object {$_}); if ($v -notcontains $b) {[Environment]::SetEnvironmentVariable('Path', (($v + @($b)) -join ';'), 'User')}
+$env:Path="$b;$env:Path"
 ```
 
 Linux Bash:
 
 ```bash
 printf '\nexport PATH="%s/bin:$PATH"\n' "$PWD" >> ~/.bashrc
+export PATH="$PWD/bin:$PATH"
 ```
 
 macOS Zsh:
 
 ```zsh
 printf '\nexport PATH="%s/bin:$PATH"\n' "$PWD" >> ~/.zshrc
+export PATH="$PWD/bin:$PATH"
 ```
 
-In a new terminal, run `eda model` to select a provider, then `eda` to chat.
-If multiple Agent-EDA clones are installed, check which launcher is first with
-`where eda` on Windows or `command -v eda` on Linux and macOS. The `activate`
-scripts remain available for temporary use in a single terminal.
+### 3. Choose a provider and start
+
+```text
+eda --status
+eda model
+eda
+```
+
+You can run these commands from any directory. The PATH entry is permanent;
+you do not need to run setup or `activate` again in a new terminal. To check
+that it works in future terminals, close the current terminal and open a new
+one. On Windows, **fully close and reopen VS Code** before using a new
+integrated terminal; opening another tab in an already running VS Code may
+keep its old PATH. Use `where eda` on Windows or `command -v eda` on Linux and
+macOS to see which clone supplies the command.
 
 Windows Git may use CRLF checkout line endings. Setup verifies the reviewed
 CLI adapters after normalizing those line endings, and the repository requests
