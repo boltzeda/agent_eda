@@ -51,6 +51,14 @@ and `eda model`. If KiCad's `pcbnew` binding is attached to a particular Python,
 and `AGENT_EDA_BUILD` overrides for maintainers. Linux is the verified setup
 host; native macOS and Windows installation checks remain open.
 
+On Windows, the PCB tool's setup check searches standard KiCad installations
+for `pcbnew.py` and its native libraries. For a custom installation, set
+`KICAD_ROOT` to its root directory before running setup. If KiCad's binding
+uses a different Python version, rerun setup with `--pcb-python` pointing to
+a compatible interpreter; setup recreates only that tool's environment when
+the interpreter changes. KiCad itself and its Python binding must be installed
+separately.
+
 Tools and requirements are versioned here. Generated `.venv` directories,
 Hermes builds, profiles, and authentication files are deliberately outside the
 Git repository. See [architecture](docs/ARCHITECTURE.md) for that boundary.

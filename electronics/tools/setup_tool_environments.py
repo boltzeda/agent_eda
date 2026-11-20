@@ -69,6 +69,28 @@ def _system_kicad_python() -> Path | None:
     return None
 
 
+def probe_pcbnew(python: Path, tools_root: Path = TOOLS_ROOT) -> str:
+    """Check KiCad with the same binding and DLL discovery used at runtime."""
+    code = (
+        "from pcb_workflow.kicad_environment import import_pcbnew; "
+        "module = import_pcbnew(); "
+        "print(getattr(module, 'GetBuildVersion', lambda: 'available')())"
+    )
+    result = subprocess.run(
+        [str(python), "-c", code], cwd=tools_root,
+        capture_output=True, text=True, errors="replace", check=False,
+    )
+    if result.returncode:
+        raise RuntimeError(
+            f"KiCad pcbnew could not load in {python}. "
+            "Install a KiCad version with Python bindings, then rerun setup. "
+            "For a custom installation set KICAD_ROOT or KICAD_PYTHON_PATH and KICAD_BIN; "
+            "if the binding uses another Python version, pass --pcb-python. "
+            f"Details: {result.stderr[-2200:]}"
+        )
+    return result.stdout.strip().splitlines()[-1] if result.stdout.strip() else "available"
+
+
 def setup_tool(
     tool_name: str,
     python_version: str,
@@ -85,6 +107,14 @@ def setup_tool(
     uv = _uv()
     if recreate and environment.exists():
         shutil.rmtree(environment)
+    if tool_name == "pcb_workflow" and pcb_python and python.is_file():
+        requested = Path(pcb_python).expanduser().resolve()
+        current = _base_python(python)
+        if current != requested:
+            if environment.is_symlink():
+                raise RuntimeError(f"Cannot recreate a linked PCB environment: {environment}")
+            print(f"Recreating pcb_workflow with {requested}...", flush=True)
+            shutil.rmtree(environment)
     if not python.is_file():
         selected_python = pcb_python if tool_name == "pcb_workflow" and pcb_python else python_version
         command = [uv, "venv", "--python", selected_python]
@@ -99,14 +129,8 @@ def setup_tool(
             command.append("--system-site-packages")
         command.append(str(environment))
         subprocess.run(command, check=True)
-    elif tool_name == "pcb_workflow" and pcb_python:
-        requested = Path(pcb_python).expanduser().resolve()
-        current = _base_python(python)
-        if current is not None and current != requested:
-            raise RuntimeError(
-                f"{environment} uses {current}, not requested KiCad Python {requested}; "
-                "rerun with --tool pcb_workflow --recreate --pcb-python <path>."
-            )
+    if tool_name == "pcb_workflow":
+        print(f"KiCad pcbnew: {probe_pcbnew(python, TOOLS_ROOT)}", flush=True)
     substantive = [
         line.strip() for line in requirements.read_text(encoding="utf-8").splitlines()
         if line.strip() and not line.lstrip().startswith("#")
@@ -117,11 +141,6 @@ def setup_tool(
             cwd=directory,
             check=True,
         )
-    if tool_name == "pcb_workflow":
-        probe = subprocess.run([str(python), "-c", "import pcbnew"],
-                               capture_output=True, text=True, check=False)
-        if probe.returncode:
-            raise RuntimeError(f"KiCad pcbnew is not importable in {python}: {probe.stderr[-1000:]}")
     print(f"Ready: {tool_name} -> {python}", flush=True)
 
 

@@ -15,7 +15,7 @@ MODULES = {
     'kicad_library_generate': ('sexpdata',),
     'kicad_schematic_setup': (),
     'kicad_schematic_generate': ('circuit_synth',),
-    'pcb_workflow': ('pcbnew', 'torch', 'numpy', 'networkx', 'deap', 'shapely'),
+    'pcb_workflow': ('torch', 'numpy', 'networkx', 'deap', 'shapely'),
     'acquire_adi_model': (),
     'acquire_nxp_model': (),
     'acquire_st_model': (),
@@ -32,11 +32,15 @@ def verify(build: Path) -> dict:
         if not python.is_file():
             results[name] = {'passed': False, 'error': 'private interpreter missing'}
             continue
-        code = '; '.join(['import sys', *[f'import {module}' for module in modules],
-                          'print(sys.version.split()[0])'])
+        imports = ['import sys', *[f'import {module}' for module in modules]]
+        if name == 'pcb_workflow':
+            imports.append('from pcb_workflow.kicad_environment import import_pcbnew')
+            imports.append('import_pcbnew()')
+        code = '; '.join([*imports, 'print(sys.version.split()[0])'])
         try:
             run = subprocess.run([str(python), '-c', code], text=True,
-                                 capture_output=True, timeout=45, check=False)
+                                 capture_output=True, timeout=45, check=False,
+                                 cwd=build.resolve() / 'tools' if name == 'pcb_workflow' else None)
             results[name] = {'passed': run.returncode == 0,
                              'python': run.stdout.strip(),
                              'error': run.stderr[-700:] if run.returncode else ''}
