@@ -25,7 +25,7 @@ First-time setup may take several minutes. Wait for `Agent-EDA ready` before con
 
 ### Prerequisites
 
-Install as your normal user. You need **Python 3.11 or newer and [uv](https://docs.astral.sh/uv/)**. Install **KiCad** with its symbol and footprint libraries and `kicad-cli` for native EDA work. PCB placement and routing also need a Python interpreter that can import KiCad's `pcbnew` binding.
+Install as your normal user. You need **Python 3.11 or newer and [uv](https://docs.astral.sh/uv/)**. To complete setup, install KiCad with a `pcbnew` Python binding compatible with the Python used by the PCB tool. Install KiCad's symbol and footprint libraries and `kicad-cli` for native EDA work.
 
 ### Linux
 
@@ -135,7 +135,7 @@ For example, type `eda model` after the Windows `C:\...>` prompt. Type `/model` 
 
 ## Updates
 
-Run `eda update` in a terminal or `/update` inside Agent-EDA to install new changes from this repository. Save or commit local edits first. Updates preserve your provider settings and chat history.
+Run `eda update` in a terminal or `/update` inside Agent-EDA to install new changes from this repository. Keep this installation checkout on an unmodified `main` branch. To propose source changes, open a pull request from your fork; the maintainer merges accepted changes. Updates preserve your provider settings and chat history.
 
 ## Troubleshooting
 
