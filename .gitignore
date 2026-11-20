@@ -10,3 +10,9 @@ node_modules/
 /data/
 /cache/
 /evidence/
+
+# Maintainer-only records retained in the private working source.
+/docs/ARCHITECTURE.md
+/docs/UPGRADE.md
+/docs/MIGRATION.md
+/docs/MIGRATION_FILE_INVENTORY.md

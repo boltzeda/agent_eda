@@ -104,7 +104,7 @@ Setup does not install KiCad or its Python binding. On Windows it searches stand
 
 Linux is the verified setup host. Native macOS and Windows installation qualification remains open. On Windows, Git may check out files with CRLF endings; setup normalizes line endings when verifying the reviewed CLI adapters.
 
-The checkout must remain where you installed it because its launcher points to the sibling build and data directories. Generated builds, virtual environments, profiles, and credentials are outside the Git repository. See [architecture](docs/ARCHITECTURE.md).
+The checkout must remain where you installed it because its launcher points to the sibling build and data directories. Generated builds, virtual environments, profiles, and credentials are outside the Git repository.
 
 ## First steps
 
@@ -148,13 +148,6 @@ Run `eda update` in a terminal or `/update` inside Agent-EDA to install new chan
 | Arrow keys do not move an old Windows model menu | Type the provider's displayed number and press Enter, then update Agent-EDA for the scrolling picker. |
 | A generated file is missing | Check the tool error and reported output path. A skill being loaded does not mean generation succeeded. |
 
-## Documentation
-
-- [Architecture and state boundaries](docs/ARCHITECTURE.md)
-- [Hermes upgrade procedure](docs/UPGRADE.md)
-- [Migration status](docs/MIGRATION.md)
-- [Third-party notices](THIRD_PARTY_NOTICES.md)
-
 ## License
 
-BoltzPCB-owned code is [MIT licensed](LICENSE). Bundled and fetched third-party code retains its applicable license and notices.
+BoltzPCB-owned code is [MIT licensed](LICENSE). Bundled and fetched third-party code retains its applicable license and [notices](THIRD_PARTY_NOTICES.md).
