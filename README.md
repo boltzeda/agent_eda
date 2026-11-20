@@ -17,7 +17,7 @@ Describe a circuit in the terminal, then use Agent-EDA to work through component
 - **Your model provider:** choose a provider with `eda model`. Setup does not copy credentials or require Nous Portal login.
 - **Persistent local work:** conversations and configuration live in a private profile outside the Git checkout.
 
-A skill is an instruction for the agent. It does not prove an electrical design correct or install external software. Generated schematics and boards still need engineering review, KiCad checks, and verification against the selected components' datasheets.
+Generated schematics and boards still need engineering review, KiCad checks, and verification against the selected components' datasheets.
 
 ## Installation
 
