@@ -135,19 +135,7 @@ For example, type `eda model` after the Windows `C:\...>` prompt. Type `/model` 
 
 ## Updates
 
-For an installed Git checkout, run `eda update` in a terminal or `/update` inside chat. The updater fetches the Agent-EDA repository's `main` branch, requires a clean checkout and a fast-forward update, assembles and checks the new build, then switches the local installation. It preserves provider settings and session history in the new profile. A failed check leaves the previous build available.
-
-The first public snapshot shipped without a working `/update`. If you installed that snapshot, bootstrap it once from the checkout:
-
-```bash
-git pull --ff-only origin main
-python3 distribution/scripts/update_product.py
-```
-
-On Windows, use `py -3 distribution/scripts/update_product.py` for the second
-command.
-
-After that, use `eda update` or `/update` for later Agent-EDA commits. These commands do not automatically advance the separately pinned Hermes release. See [Hermes upgrade procedure](docs/UPGRADE.md).
+Run `eda update` in a terminal or `/update` inside Agent-EDA to install new changes from this repository. Save or commit local edits first. Updates preserve your provider settings and chat history.
 
 ## Troubleshooting
 
