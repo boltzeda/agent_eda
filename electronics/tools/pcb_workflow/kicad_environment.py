@@ -99,6 +99,7 @@ def _binding_candidates() -> list[Path]:
     for root in _root_candidates():
         candidates.extend((
             root / "bin",
+            root / "bin" / "Lib" / "site-packages",
             root / "lib" / "python3" / "dist-packages",
             root / "lib" / "python3" / "site-packages",
             root / "lib" / f"python{version}" / "site-packages",
@@ -121,7 +122,7 @@ def _binding_candidates() -> list[Path]:
 
 def _looks_like_binding_directory(path: Path) -> bool:
     try:
-        return any(path.glob("pcbnew.py")) or any(path.glob("_pcbnew*"))
+        return (path / "pcbnew.py").is_file() or (path / "pcbnew" / "__init__.py").is_file()
     except OSError:
         return False
 
