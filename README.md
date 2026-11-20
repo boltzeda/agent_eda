@@ -1,3 +1,5 @@
+![Agent-EDA purple wordmark](assets/agent-eda-wordmark.png)
+
 # Agent-EDA
 
 An electronics design agent by **BoltzPCB**.
