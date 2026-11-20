@@ -21,9 +21,11 @@ Generated schematics and boards still need engineering review, KiCad checks, and
 
 ## Installation
 
-Install as your normal user. You need **Python 3.11 or newer and [uv](https://docs.astral.sh/uv/)**. Install **KiCad** with its symbol and footprint libraries and `kicad-cli` for native EDA work. PCB placement and routing also need a Python interpreter that can import KiCad's `pcbnew` binding.
-
 First-time setup may take several minutes. Wait for `Agent-EDA ready` before continuing. If setup stops, fix the reported issue and run the same setup command again.
+
+### Prerequisites
+
+Install as your normal user. You need **Python 3.11 or newer and [uv](https://docs.astral.sh/uv/)**. Install **KiCad** with its symbol and footprint libraries and `kicad-cli` for native EDA work. PCB placement and routing also need a Python interpreter that can import KiCad's `pcbnew` binding.
 
 ### Linux
 
