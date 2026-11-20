@@ -49,7 +49,7 @@ def update(product: Path) -> int:
         raise RuntimeError('Switch to the main branch before updating Agent-EDA.')
     if git(product, 'status', '--porcelain'):
         raise RuntimeError('The Agent-EDA source clone has local changes; preserve them before updating.')
-    old_record = json.loads(record_path.read_text())
+    old_record = json.loads(record_path.read_text(encoding='utf-8'))
     old_build = workspace / 'builds' / old_record['build']
     old_home = data / old_record['home']
     if (not old_build.is_dir() or old_build.is_symlink() or
@@ -73,7 +73,7 @@ def update(product: Path) -> int:
     # A failed installation leaves the old launcher record and profile intact.
     sys.path.insert(0, str(product))
     from setup import reference_checkout, source_digest, uv_executable
-    lock = json.loads((product / 'distribution/upstream.lock.json').read_text())
+    lock = json.loads((product / 'distribution/upstream.lock.json').read_text(encoding='utf-8'))
     reference = workspace / 'upstream' / 'hermes'
     reference_checkout(reference, lock)
     name = f"{lock['baseline']['tag']}-eda-local-{source_digest()}-{revision[:12]}"
@@ -128,7 +128,7 @@ def update(product: Path) -> int:
               'assembly_manifest_sha256': hashlib.sha256(manifest.read_bytes()).hexdigest(),
               'product_revision': revision}
     temporary = data / 'local_install.json.update-tmp'
-    temporary.write_text(json.dumps(record, indent=2) + '\n')
+    temporary.write_text(json.dumps(record, indent=2) + '\n', encoding='utf-8')
     os.replace(temporary, record_path)
     print(f'Agent-EDA updated to {revision[:12]}. Start `eda` to use the new build.', flush=True)
     return 0

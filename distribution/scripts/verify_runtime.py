@@ -33,7 +33,7 @@ def verify(build: Path, home: Path, product: Path) -> dict:
     from agent.turn_failure_copy import oauth_relogin_command
     from agent_eda.provider_setup import _configure, start_provider_setup
 
-    manifest = json.loads((build / '.agent-eda-assembly.json').read_text())
+    manifest = json.loads((build / '.agent-eda-assembly.json').read_text(encoding='utf-8'))
     if manifest['upstream']['tag'] not in ('v0.23.1', 'v0.23.2'):
         raise AssertionError('smoke test expects the locked baseline or candidate')
     for function, args in ((_nous_device_code_login, ()), (_login_nous, (None, None))):

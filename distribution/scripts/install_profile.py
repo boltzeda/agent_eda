@@ -33,7 +33,7 @@ def install(build: Path, home: Path, provider: str | None = None, model: str | N
               + 'platform_toolsets:\n  cli:\n    - hermes-cli\n'
               + ''.join(f'    - {n}\n' for n in toolsets)
               + 'skills:\n  auto_load:\n    - eda-design-workflow\n')
-    (home / 'config.yaml').write_text(config)
+    (home / 'config.yaml').write_text(config, encoding='utf-8')
     return {'profile_home': str(home), 'plugins': names, 'skills': len(list((home / 'skills').rglob('SKILL.md')))}
 
 

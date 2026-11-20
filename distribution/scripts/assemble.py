@@ -146,7 +146,7 @@ def assemble(product: Path, reference: Path, output: Path, selected: str = 'base
     workspace = product.parent
     if output.parent != workspace / 'builds' or output.exists() or any(p.is_symlink() for p in output.parents):
         raise ValueError('output must be a new immediate child of workspace/builds')
-    lock = json.loads((product / 'distribution/upstream.lock.json').read_text())
+    lock = json.loads((product / 'distribution/upstream.lock.json').read_text(encoding='utf-8'))
     sha = checked_source(reference, lock, selected)
     output.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(prefix='.assemble-', dir=output.parent) as temp:
@@ -173,7 +173,7 @@ def assemble(product: Path, reference: Path, output: Path, selected: str = 'base
         # detect drift before promoting a build.
         replaced = {}
         overlay_root = product / 'distribution/overlays'
-        declarations = json.loads((overlay_root / 'manifest.json').read_text())['core_adapters']
+        declarations = json.loads((overlay_root / 'manifest.json').read_text(encoding='utf-8'))['core_adapters']
         declared = {entry['path']: entry for entry in declarations}
         for source in sorted(overlay_root.rglob('*')) if overlay_root.exists() else ():
             if not source.is_file():
@@ -211,29 +211,30 @@ def assemble(product: Path, reference: Path, output: Path, selected: str = 'base
                 '    return',
             ],
         }
-        patches = json.loads((product / 'distribution/patches/manifest.json').read_text())['patches']
+        patches = json.loads((product / 'distribution/patches/manifest.json').read_text(encoding='utf-8'))['patches']
         for entry in patches:
             target = staged / entry['path']
             if digest(target) != entry['upstream_sha256'][selected]:
                 raise ValueError(f'upstream changed under guarded patch: {entry["path"]}')
             if entry['guard'] in guards:
-                patched = guard_python_functions(target.read_text(), entry['path'],
+                patched = guard_python_functions(target.read_text(encoding='utf-8'), entry['path'],
                                                  entry['functions'], guards[entry['guard']])
                 if entry['guard'] == 'disable_native_update':
                     patched = patch_cli_provider_selection(patched, entry['path'])
             else:
-                patched = patch_model_picker(target.read_text(), entry['path'], entry['guard'])
-            target.write_text(patched)
+                patched = patch_model_picker(target.read_text(encoding='utf-8'), entry['path'], entry['guard'])
+            target.write_text(patched, encoding='utf-8')
             replaced[entry['path']] = {
                 'upstream_sha256': entry['upstream_sha256'][selected],
                 'product_sha256': digest(target), 'patch': entry['guard']}
         files = {p.relative_to(staged).as_posix(): digest(p) for p in sorted(staged.rglob('*')) if p.is_file()}
         manifest = {'phase': 'assembled-source-only', 'qualified': False,
                     'upstream': {'repository': lock['repository'], **lock[selected]},
-                    'product': json.loads((product / 'distribution/product.json').read_text()),
+                    'product': json.loads((product / 'distribution/product.json').read_text(encoding='utf-8')),
                     'core_adapters': replaced,
                     'source_files_sha256': files}
-        (staged / '.agent-eda-assembly.json').write_text(json.dumps(manifest, indent=2, sort_keys=True) + '\n')
+        (staged / '.agent-eda-assembly.json').write_text(
+            json.dumps(manifest, indent=2, sort_keys=True) + '\n', encoding='utf-8')
         if output.exists():
             raise FileExistsError(output)
         os.replace(staged, output)

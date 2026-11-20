@@ -44,7 +44,7 @@ def migrate(previous: Path, build: Path, target: Path) -> None:
         shutil.copytree(plugins / name, destination)
     shutil.copy2(build / 'agent_eda_branding' / 'SOUL.md', target / 'SOUL.md')
     yaml = YAML()
-    config = yaml.load((target / 'config.yaml').read_text())
+    config = yaml.load((target / 'config.yaml').read_text(encoding='utf-8'))
     if not isinstance(config, dict):
         raise ValueError('profile config is not a YAML mapping')
     def add(section: dict, key: str, values: list[str]) -> None:
@@ -62,7 +62,7 @@ def migrate(previous: Path, build: Path, target: Path) -> None:
         if name not in toolsets:
             toolsets.append(name)
     add(config.setdefault('skills', {}), 'auto_load', ['eda-design-workflow'])
-    with (target / 'config.yaml').open('w') as stream:
+    with (target / 'config.yaml').open('w', encoding='utf-8') as stream:
         yaml.dump(config, stream)
 
 

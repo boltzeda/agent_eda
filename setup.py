@@ -73,7 +73,7 @@ def write_local_record(build: Path, home: Path) -> None:
             ['git', '-C', str(PRODUCT), 'rev-parse', 'HEAD'], text=True).strip()
     target = data / 'local_install.json'
     temporary = data / 'local_install.json.tmp'
-    temporary.write_text(json.dumps(record, indent=2) + '\n')
+    temporary.write_text(json.dumps(record, indent=2) + '\n', encoding='utf-8')
     os.replace(temporary, target)
 
 
@@ -84,18 +84,18 @@ def setup(reference: Path, store: Path | None, provider: str | None,
     if bool(provider) != bool(model):
         raise ValueError('--provider and --model must be given together')
     uv = uv_executable()
-    lock = json.loads((PRODUCT / 'distribution' / 'upstream.lock.json').read_text())
+    lock = json.loads((PRODUCT / 'distribution' / 'upstream.lock.json').read_text(encoding='utf-8'))
     reference_checkout(reference, lock)
     name = f"{lock['baseline']['tag']}-eda-local-{source_digest()}"
     build = WORKSPACE / 'builds' / name
     prior_record = WORKSPACE / 'data' / 'local_install.json'
-    if prior_record.is_file() and json.loads(prior_record.read_text()).get('build') != name:
+    if prior_record.is_file() and json.loads(prior_record.read_text(encoding='utf-8')).get('build') != name:
         raise RuntimeError('This clone has a different installed build. Use the qualified upgrade process; '
                            'setup.py will not replace an active profile with a changed build.')
     if not build.exists():
         print('Assembling Agent-EDA from the pinned Hermes source...', flush=True)
         assemble(PRODUCT, reference, build)
-    manifest = json.loads((build / '.agent-eda-assembly.json').read_text())
+    manifest = json.loads((build / '.agent-eda-assembly.json').read_text(encoding='utf-8'))
     if manifest['upstream']['commit'] != lock['baseline']['commit']:
         raise RuntimeError('Existing local build does not match the pinned Hermes baseline')
     print('Installing the pinned Agent-EDA runtime...', flush=True)
