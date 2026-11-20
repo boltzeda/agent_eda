@@ -122,7 +122,7 @@ def setup_tool(
                                capture_output=True, text=True, check=False)
         if probe.returncode:
             raise RuntimeError(f"KiCad pcbnew is not importable in {python}: {probe.stderr[-1000:]}")
-    print(f"Ready: {tool_name} -> {python}")
+    print(f"Ready: {tool_name} -> {python}", flush=True)
 
 
 def main() -> int:
@@ -143,7 +143,8 @@ def main() -> int:
     if args.recreate and not args.tool:
         parser.error("--recreate requires --tool so it cannot remove all tool environments accidentally")
     selected = (args.tool,) if args.tool else TOOL_NAMES
-    for name in selected:
+    for index, name in enumerate(selected, 1):
+        print(f"Tool environment {index}/{len(selected)}: {name}...", flush=True)
         setup_tool(name, args.python or DEFAULT_TOOL_PYTHON.get(name, '3.11'),
                    pcb_python=args.pcb_python, recreate=args.recreate)
     return 0

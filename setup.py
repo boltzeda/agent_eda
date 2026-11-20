@@ -94,7 +94,7 @@ def setup(reference: Path, store: Path | None, provider: str | None,
                            'setup.py will not replace an active profile with a changed build.')
     if not build.exists():
         print('Assembling Agent-EDA from the pinned Hermes source...', flush=True)
-        assemble(PRODUCT, reference, build)
+        assemble(PRODUCT, reference, build, progress=lambda message: print(message, flush=True))
     manifest = json.loads((build / '.agent-eda-assembly.json').read_text(encoding='utf-8'))
     if manifest['upstream']['commit'] != lock['baseline']['commit']:
         raise RuntimeError('Existing local build does not match the pinned Hermes baseline')

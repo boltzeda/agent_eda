@@ -11,6 +11,7 @@ import shutil
 import subprocess
 import tarfile
 import tempfile
+from typing import Callable
 
 
 def digest(path: Path) -> str:
@@ -140,7 +141,12 @@ def patch_cli_provider_selection(source: str, path: str) -> str:
     return source
 
 
-def assemble(product: Path, reference: Path, output: Path, selected: str = 'baseline') -> dict:
+def assemble(product: Path, reference: Path, output: Path, selected: str = 'baseline',
+             progress: Callable[[str], None] | None = None) -> dict:
+    def announce(message: str) -> None:
+        if progress is not None:
+            progress(message)
+
     product, reference = product.resolve(), reference.resolve()
     output = output.resolve()
     workspace = product.parent
@@ -153,13 +159,25 @@ def assemble(product: Path, reference: Path, output: Path, selected: str = 'base
         staged = Path(temp) / 'runtime'
         staged.mkdir()
         with tempfile.TemporaryFile() as stream:
+            announce('Archiving the pinned Hermes source...')
             subprocess.run(['git', '-C', str(reference), 'archive', '--format=tar', sha],
                            stdout=stream, check=True)
             stream.seek(0)
             with tarfile.open(fileobj=stream) as archive:
-                archive.extractall(staged, filter='data')
+                members = archive.getmembers()
+                total = len(members)
+                announce(f'Extracting Hermes source: 0/{total:,} entries')
+
+                def counted_members():
+                    for count, member in enumerate(members, 1):
+                        yield member
+                        if count % 2000 == 0 or count == total:
+                            announce(f'Extracting Hermes source: {count:,}/{total:,} entries')
+
+                archive.extractall(staged, members=counted_members(), filter='data')
         # Product code has its own namespace. Installation into native discovery paths
         # is a separate, qualified adapter operation.
+        announce('Adding Agent-EDA tools, skills, and CLI adapters...')
         copy_owned(product / 'electronics', staged / 'agent_eda')
         copy_owned(product / 'distribution/branding', staged / 'agent_eda_branding')
         # Standalone tool packages must also live on the native `tools` import
@@ -227,7 +245,15 @@ def assemble(product: Path, reference: Path, output: Path, selected: str = 'base
             replaced[entry['path']] = {
                 'upstream_sha256': entry['upstream_sha256'][selected],
                 'product_sha256': digest(target), 'patch': entry['guard']}
-        files = {p.relative_to(staged).as_posix(): digest(p) for p in sorted(staged.rglob('*')) if p.is_file()}
+        announce('Verifying assembled source file hashes...')
+        files = {}
+        for path in sorted(staged.rglob('*')):
+            if not path.is_file():
+                continue
+            files[path.relative_to(staged).as_posix()] = digest(path)
+            if len(files) % 2000 == 0:
+                announce(f'Verified {len(files):,} source files...')
+        announce(f'Verified {len(files):,} source files.')
         manifest = {'phase': 'assembled-source-only', 'qualified': False,
                     'upstream': {'repository': lock['repository'], **lock[selected]},
                     'product': json.loads((product / 'distribution/product.json').read_text(encoding='utf-8')),

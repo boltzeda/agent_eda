@@ -80,7 +80,7 @@ def update(product: Path) -> int:
     candidate = workspace / 'builds' / name
     if not candidate.exists():
         print(f'Assembling Agent-EDA {revision[:12]}...', flush=True)
-        assemble(product, reference, candidate)
+        assemble(product, reference, candidate, progress=lambda message: print(message, flush=True))
     manifest = candidate / '.agent-eda-assembly.json'
     if not manifest.is_file():
         raise RuntimeError('Candidate build is incomplete.')
