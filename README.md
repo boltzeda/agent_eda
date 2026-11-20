@@ -30,6 +30,10 @@ Agent-EDA checkout previously defined an `eda` shell function. A plain `eda`
 command in a new shell uses whichever executable is first on `PATH`; check
 `command -v eda` if multiple checkouts are installed.
 
+Windows Git may use CRLF checkout line endings. Setup verifies the reviewed
+CLI adapters after normalizing those line endings, and the repository requests
+LF for future checkouts.
+
 `eda model` lets each user choose and authenticate their own provider. Setup
 does not copy credentials and does not use Nous Portal. On first run, setup
 fetches the exact pinned Hermes commit into a separate, fetch-only reference,

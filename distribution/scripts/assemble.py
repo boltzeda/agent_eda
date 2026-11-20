@@ -17,6 +17,14 @@ def digest(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def checked_adapter_bytes(source: Path, entry: dict, relative_path: str) -> bytes:
+    """Verify a core adapter independent of Windows checkout line endings."""
+    content = source.read_bytes().replace(b'\r\n', b'\n')
+    if hashlib.sha256(content).hexdigest() != entry['product_sha256']:
+        raise ValueError(f'core adapter is undeclared or changed: {relative_path}')
+    return content
+
+
 def git(reference: Path, *args: str) -> str:
     return subprocess.check_output(['git', '-C', str(reference), *args], text=True).strip()
 
@@ -179,12 +187,14 @@ def assemble(product: Path, reference: Path, output: Path, selected: str = 'base
             if not target.is_file() or target.is_symlink():
                 raise ValueError(f'core adapter target missing or unsafe: {rel}')
             entry = declared.get(rel.as_posix())
-            if not entry or entry['product_sha256'] != digest(source):
+            if not entry:
                 raise ValueError(f'core adapter is undeclared or changed: {rel}')
+            adapter = checked_adapter_bytes(source, entry, rel.as_posix())
             if entry['upstream_sha256'][selected] != digest(target):
                 raise ValueError(f'upstream changed under core adapter: {rel}')
-            replaced[rel.as_posix()] = {'upstream_sha256': digest(target), 'product_sha256': digest(source)}
-            shutil.copy2(source, target)
+            replaced[rel.as_posix()] = {'upstream_sha256': digest(target),
+                                       'product_sha256': hashlib.sha256(adapter).hexdigest()}
+            target.write_bytes(adapter)
         if set(replaced) != set(declared):
             raise ValueError(f'core adapter declarations differ from sources: {set(declared) ^ set(replaced)}')
         guards = {

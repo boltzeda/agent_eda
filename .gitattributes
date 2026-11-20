@@ -1,4 +1,5 @@
 # Private migration evidence and local skill-manager state are excluded from public archives.
+* text=auto eol=lf
 distribution/preservation export-ignore
 electronics/skills/.hub export-ignore
 electronics/skills/.curator_ledger.jsonl export-ignore
