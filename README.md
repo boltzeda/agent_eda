@@ -113,27 +113,6 @@ The checkout must remain where you installed it because its launcher points to t
 
 For a PCB request, Agent-EDA's workflow asks for requirements and checks the component libraries before schematic generation. It then uses simulation when a usable model and simulator are available. The PCB workflow includes placement review before routing. You can explicitly ask to skip a step; skipped work should be reported as unverified.
 
-## Bundled tools
-
-Setup creates a separate Python environment for each of these twelve tool entrypoints:
-
-| Tool | Purpose |
-| --- | --- |
-| `component_datasheet_prepare` | Prepare a datasheet source for component extraction |
-| `component_datasheet_parse` | Extract component information from datasheets |
-| `component_schema_validate` | Check structured component data |
-| `kicad_library_find` | Find candidate KiCad symbols and footprints |
-| `kicad_library_generate` | Generate KiCad library assets |
-| `kicad_schematic_setup` | Check schematic-generation prerequisites |
-| `kicad_schematic_generate` | Generate a native KiCad schematic |
-| `pcb_workflow` | Prepare, place, review, and route a board |
-| `acquire_adi_model` | Acquire an Analog Devices model |
-| `acquire_nxp_model` | Acquire an NXP model |
-| `acquire_st_model` | Acquire an ST model |
-| `acquire_ti_model` | Acquire a Texas Instruments model |
-
-The auto-loaded `eda-design-workflow` skill guides circuit-design requests. Other bundled EDA skills cover datasheets, library work, schematics, simulation, model acquisition, and PCB work. Tool availability does not guarantee that a specific part has a usable model, footprint, or complete datasheet data.
-
 ## Commands
 
 Run shell commands in your operating-system terminal. Run slash commands **inside** an `eda` chat.
