@@ -23,7 +23,7 @@ Generated schematics and boards still need engineering review, KiCad checks, and
 
 Install as your normal user. You need **Python 3.11 or newer and [uv](https://docs.astral.sh/uv/)**. Install **KiCad** with its symbol and footprint libraries and `kicad-cli` for native EDA work. PCB placement and routing also need a Python interpreter that can import KiCad's `pcbnew` binding.
 
-The first setup fetches the pinned Hermes source, assembles Agent-EDA, installs its Python runtime, and creates twelve private tool environments. Some tool dependencies are large; the first run can take several minutes. Wait for `Agent-EDA ready` before continuing. Rerunning setup after an interruption resumes installation without replacing an existing configured profile.
+First-time setup may take several minutes. Wait for `Agent-EDA ready` before continuing. If setup stops, fix the reported issue and run the same setup command again.
 
 ### Linux
 
