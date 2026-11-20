@@ -6,18 +6,7 @@ An electronics design agent by **BoltzPCB**.
 
 Describe a circuit in the terminal, then use Agent-EDA to work through component research, KiCad libraries, schematic generation, simulation, and PCB layout. The agent uses an auto-loaded design workflow and reports which parts of a design it verified, skipped, or could not complete.
 
-[Installation](#installation) · [First steps](#first-steps) · [Capabilities](#capabilities) · [Commands](#commands) · [Updates](#updates) · [Troubleshooting](#troubleshooting)
-
-## Capabilities
-
-- **Circuit design workflow:** clarify requirements, identify blocks and pins, verify symbols and footprints, generate a schematic, simulate where models and tools permit, then review placement before routing.
-- **KiCad work:** find or generate component libraries, generate native schematics, and run the PCB placement and routing workflow.
-- **Component research:** prepare and parse datasheets, validate structured component data, and acquire supported vendor models.
-- **Independent tools:** datasheet, library, schematic, model, and PCB tools can each be called directly. The workflow skill guides their order without blocking tool calls.
-- **Your model provider:** choose a provider with `eda model`. Setup does not copy credentials or require Nous Portal login.
-- **Persistent local work:** conversations and configuration live in a private profile outside the Git checkout.
-
-Generated schematics and boards still need engineering review, KiCad checks, and verification against the selected components' datasheets.
+[Installation](#installation) · [First steps](#first-steps) · [Commands](#commands) · [Updates](#updates) · [Troubleshooting](#troubleshooting)
 
 ## Installation
 
