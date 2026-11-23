@@ -13,6 +13,27 @@ from types import SimpleNamespace
 from unittest.mock import patch
 
 
+def verify_update_handoff(product: Path, relaunch) -> None:
+    """Check the product updater target without starting an update."""
+    with patch.dict(os.environ, AGENT_EDA_PRODUCT=str(product)):
+        if sys.platform == 'win32':
+            with patch('subprocess.call', return_value=0) as call:
+                try:
+                    relaunch(['update'], preserve_inherited=False)
+                except SystemExit as error:
+                    if error.code != 0:
+                        raise AssertionError('/update Windows handoff failed') from error
+                else:
+                    raise AssertionError('/update Windows handoff did not exit')
+            command = call.call_args.args[0] if call.call_args else []
+        else:
+            with patch('hermes_cli.relaunch.os.execv') as execv:
+                relaunch(['update'], preserve_inherited=False)
+            command = execv.call_args.args[1] if execv.call_args else []
+    if command[-2:] != [str(product / 'bin/eda'), 'update']:
+        raise AssertionError('/update relaunch did not target the Agent-EDA launcher')
+
+
 def verify(build: Path, home: Path, product: Path) -> dict:
     build, home, product = build.resolve(), home.resolve(), product.resolve()
     os.environ['HERMES_HOME'] = str(home)
@@ -112,10 +133,7 @@ def verify(build: Path, home: Path, product: Path) -> dict:
     if CLICommandsMixin._handle_update_command(update_probe) is not True or update_probe._pending_relaunch != ['update']:
         raise AssertionError('/update did not request the Agent-EDA updater')
     from hermes_cli.relaunch import relaunch
-    with patch.dict(os.environ, AGENT_EDA_PRODUCT=str(product)), patch('hermes_cli.relaunch.os.execv') as execv:
-        relaunch(['update'], preserve_inherited=False)
-    if execv.call_args.args[1][-2:] != [str(product / 'bin/eda'), 'update']:
-        raise AssertionError('/update relaunch did not target the Agent-EDA launcher')
+    verify_update_handoff(product, relaunch)
     try:
         cmd_update(None)
     except SystemExit as error:
