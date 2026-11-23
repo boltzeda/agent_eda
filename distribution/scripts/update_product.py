@@ -10,6 +10,8 @@ import sys
 
 from assemble import assemble
 
+RELEASE_REPOSITORY = 'https://github.com/boltzeda/agent_eda.git'
+
 
 def run(*command: str, cwd: Path | None = None, capture: bool = False) -> str:
     result = subprocess.run(command, cwd=cwd, check=True, text=True,
@@ -19,6 +21,11 @@ def run(*command: str, cwd: Path | None = None, capture: bool = False) -> str:
 
 def git(product: Path, *args: str) -> str:
     return run('git', '-C', str(product), *args, capture=True)
+
+
+def fetch_release(product: Path) -> None:
+    """Fetch the official release without depending on the clone's origin."""
+    run('git', '-C', str(product), 'fetch', '--no-tags', RELEASE_REPOSITORY, 'main')
 
 
 def digest_tree(root: Path) -> str:
@@ -40,11 +47,6 @@ def update(product: Path) -> int:
         raise RuntimeError('This installation uses a qualified Hermes build; use the qualification upgrade process.')
     if not record_path.is_file():
         raise RuntimeError('Agent-EDA is not installed; run python3 setup.py first.')
-    if git(product, 'remote', 'get-url', 'origin') not in (
-            'https://github.com/boltzeda/agent_eda.git',
-            'git@github.com:boltzeda/agent_eda.git',
-            'ssh://git@github.com/boltzeda/agent_eda.git'):
-        raise RuntimeError('Origin is not the Agent-EDA release repository.')
     if git(product, 'symbolic-ref', '--short', 'HEAD') != 'main':
         raise RuntimeError('Switch to the main branch before updating Agent-EDA.')
     if git(product, 'status', '--porcelain'):
@@ -60,7 +62,7 @@ def update(product: Path) -> int:
     if not old_manifest.is_file() or hashlib.sha256(old_manifest.read_bytes()).hexdigest() != old_record['assembly_manifest_sha256']:
         raise RuntimeError('Installed build manifest has changed.')
     print('Checking Agent-EDA releases on GitHub...', flush=True)
-    run('git', '-C', str(product), 'fetch', '--no-tags', 'origin', 'main')
+    fetch_release(product)
     head = git(product, 'rev-parse', 'HEAD')
     remote = git(product, 'rev-parse', 'FETCH_HEAD')
     subprocess.run(['git', '-C', str(product), 'merge-base', '--is-ancestor', head, remote], check=True)

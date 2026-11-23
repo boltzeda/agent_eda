@@ -126,6 +126,16 @@ For example, type `eda model` after the Windows `C:\...>` prompt. Type `/model` 
 
 Run `eda update` in a terminal or `/update` inside Agent-EDA to install new changes from this repository. Keep this installation checkout on an unmodified `main` branch. To propose source changes, open a pull request from your fork; the maintainer merges accepted changes. Updates preserve your provider settings and chat history.
 
+An older updater may stop with `Origin is not the Agent-EDA release repository.` From an unmodified `main` checkout, install the corrected updater once, then rerun it:
+
+```text
+git fetch --no-tags https://github.com/boltzeda/agent_eda.git main
+git merge --ff-only FETCH_HEAD
+eda update
+```
+
+The updater fetches the official release URL directly and still requires a fast-forward from the installed checkout.
+
 ## Troubleshooting
 
 | Problem | Check |
