@@ -44,6 +44,8 @@ class WindowsProviderPickerTests(unittest.TestCase):
         self.assertEqual(len(values), 42)
         self.assertEqual(values[7], (7, 'OpenAI'))
         self.assertEqual(create_dialog.call_args.kwargs['default'], 0)
+        self.assertIn('Tab: OK; Enter: confirm', create_dialog.call_args.kwargs['text'])
+        self.assertIsNotNone(create_dialog.call_args.kwargs['style'])
 
     def test_windows_cancel_preserves_menu_navigation(self):
         namespace = self._picker()

@@ -97,7 +97,7 @@ The checkout must remain where you installed it because its launcher points to t
 
 ## First steps
 
-1. Run `eda model` in your operating-system terminal and choose a provider using your own account or API key.
+1. Run `eda model` in your operating-system terminal and choose a provider using your own account or API key. If you run plain `eda` first, it opens the same provider picker before chat.
 2. Run `eda` to open chat. Type `/help` for interactive commands.
 3. Try: “Design a 12 V to 5 V buck converter with an LM2596 and produce a KiCad schematic.”
 4. Review the agent's component choices, electrical assumptions, verification results, and saved file paths before using a design.
@@ -134,7 +134,7 @@ Run `eda update` in a terminal or `/update` inside Agent-EDA to install new chan
 | Setup was interrupted | Fix the reported error and rerun `python3 setup.py` or `py -3 setup.py` from this checkout. |
 | `pcbnew` cannot import | Install KiCad's Python binding, then use `KICAD_ROOT` or `--pcb-python` as described in Platform notes. |
 | No model response | Run `eda model` in the system terminal and complete provider authentication. |
-| Arrow keys do not move an old Windows model menu | Type the provider's displayed number and press Enter, then update Agent-EDA for the scrolling picker. |
+| Windows provider picker | Use Up/Down to highlight a provider, Enter to select it, then Tab to focus OK and Enter to confirm. In an older numbered menu, type the displayed number and press Enter. |
 | A generated file is missing | Check the tool error and reported output path. A skill being loaded does not mean generation succeeded. |
 
 ## License

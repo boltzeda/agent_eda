@@ -87,6 +87,33 @@ def latest_release() -> str:
         return json.load(response)['tag_name']
 
 
+def launch_runtime(python: Path, arguments: list[str], *, windows: bool | None = None) -> int:
+    """Keep the invoking terminal attached while entering the pinned runtime."""
+    command = [str(python), str(Path(__file__).resolve()), *arguments]
+    if windows if windows is not None else os.name == 'nt':
+        # Windows has no POSIX process replacement. Wait with inherited stdio so
+        # input and output stay owned by this Command Prompt or PowerShell.
+        return subprocess.run(command, check=False).returncode
+    os.execv(str(python), command)
+    raise AssertionError('os.execv unexpectedly returned')
+
+
+def start_agent(hermes_main, provider_configured) -> int:
+    """Open Agent-EDA's provider picker before a fresh interactive chat."""
+    if len(sys.argv) == 1 and not provider_configured():
+        original = sys.argv
+        try:
+            sys.argv = [original[0], 'model']
+            print('Choose a model provider to finish Agent-EDA setup.', flush=True)
+            hermes_main()
+        finally:
+            sys.argv = original
+        if not provider_configured():
+            print('Provider setup was not completed. Run `eda model` to try again.')
+            return 1
+    return hermes_main() or 0
+
+
 def main() -> int:
     if len(sys.argv) > 1 and sys.argv[1] == 'update':
         sys.path.insert(0, str(PRODUCT / 'distribution' / 'scripts'))
@@ -121,13 +148,13 @@ def main() -> int:
     if not native_python.is_file():
         raise SystemExit(f'Pinned runtime environment is missing: {native_python}. Run uv sync --locked --no-dev --python 3.14 in {build}.')
     if Path(sys.executable).resolve() != native_python.resolve():
-        os.execv(str(native_python), [str(native_python), str(Path(__file__).resolve()), *sys.argv[1:]])
+        return launch_runtime(native_python, sys.argv[1:])
     print(message, flush=True)
     os.environ['HERMES_HOME'] = str(home)
     os.environ['AGENT_EDA_PRODUCT'] = str(PRODUCT)
     sys.path.insert(0, str(build))
-    from hermes_cli.main import main as hermes_main
-    return hermes_main() or 0
+    from hermes_cli.main import main as hermes_main, _has_any_provider_configured
+    return start_agent(hermes_main, _has_any_provider_configured)
 
 
 if __name__ == '__main__':
